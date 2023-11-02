@@ -7,6 +7,7 @@ const InputField = ({
   placeholder,
   register,
   maxLength,
+  type,
   errors = {},
 }) => {
 
@@ -17,14 +18,14 @@ const InputField = ({
             required
             placeholder={placeholder}
             {...register}
-            type="text"
+            type= {type}
             maxLength={maxLength}
             className="inputText"
           />
         </div>
         {errors[keyName] && (
         <div style={{ fontSize: "12px", color: "#ff0000" , textAlign: "left", marginLeft: "20px"}}>
-          {`Please enter your ${title}`}
+          {`${errors[keyName].message}`}
         </div>
       )}
     </div>

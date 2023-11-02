@@ -1,6 +1,6 @@
 import React from 'react';
-import ButtonCommon from '../ButtonCommon';
-import InputField from '../InputField';
+import ButtonCommon from '../../../../components/ButtonCommon';
+import InputField from '../../../../components/InputField';
 import { useForm } from 'react-hook-form';
 import '../../styles/Login.css';
 import { DevTool } from '@hookform/devtools';
@@ -39,7 +39,7 @@ const ForgotForm = ({ onSubmitForm }) => {
                     keyName={"nameAndEmail"}
                     placeholder={"Enter your username/email"}
                     register={register("nameAndEmail", {
-                        required: 'Userame or email is required'
+                        required: 'Please enter your username or email'
                     })}
                     errors={errors}
                 />

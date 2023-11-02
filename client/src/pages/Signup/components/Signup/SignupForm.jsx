@@ -2,11 +2,11 @@ import React from 'react';
 import ButtonCommon from '../../../../components/ButtonCommon';
 import InputField from '../../../../components/InputField';
 import { useForm } from 'react-hook-form';
-import '../../styles/Login.css';
+import '../../styles/Signup.css';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = ({ onSubmitForm, onSignup }) => {
+const SignupForm = ({ onSubmitForm, onSignup }) => {
     const navigate = useNavigate();
 
     const {
@@ -26,27 +26,37 @@ const LoginForm = ({ onSubmitForm, onSignup }) => {
     }
       
   return (
-    <div className='loginContainer'>
+    <div className='signupContainer'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
-        className='loginForm'
+        className='signupForm'
         noValidate
         >
-            <ButtonCommon
-                    title="SignUp"
-                    type="button"
-                    classButton='signupButton'
-                    classText='signupText'
-                    onClick={onSignup}
-                />
             <div className='inputContainer'>
+                <InputField
+                    title={"email"}
+                    keyName={"email"}
+                    placeholder={"Enter your email"}
+                    register={register("email", {
+                        required: 'Please enter your email',
+                        pattern: {
+                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                            message: "Invalid email format",
+                        }
+                    })}
+                    errors={errors}
+                />
                 <InputField
                     title={"username"}
                     keyName={"name"}
                     placeholder={"Enter your username"}
                     register={register("name", {
-                        required: 'Please enter your username'
+                        required: 'Please enter your username',
+                        minLength: {
+                            value: 8,
+                            message: "Username needs to be 8 characters or longer"
+                        }
                     })}
                     errors={errors}
                 />
@@ -56,23 +66,18 @@ const LoginForm = ({ onSubmitForm, onSignup }) => {
                     placeholder={"Enter your password"}
                     type={"password"}
                     register={register("password", {
-                        required: 'Please enter your password'
-                    })}
-                    errors={errors}
-                />
-                <InputField
-                    title={"otp"}
-                    keyName={"otp"}
-                    placeholder={"Enter your OTP"}
-                    register={register("otp", {
-                        required: 'Please enter your otp'
+                        required: 'Please enter your password',
+                        minLength: {
+                            value: 8,
+                            message: "Password needs to be 8 characters or longer"
+                        }
                     })}
                     errors={errors}
                 />
             </div>
             <div className='buttonContainer'>
                 <ButtonCommon
-                    title="Login"
+                    title="Signup"
                     type="submit"
                     classButton='submitButton'
                     classText='submitText'
@@ -80,11 +85,10 @@ const LoginForm = ({ onSubmitForm, onSignup }) => {
                 />
             </div>
         </form>
-        <a className="forgotPassword" onClick={forgotPassword}>Forgot password?</a>
         <DevTool control={control}/>
     </div>
     
   )
 }
 
-export default LoginForm
+export default SignupForm
