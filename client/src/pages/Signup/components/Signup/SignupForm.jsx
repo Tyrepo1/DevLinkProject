@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ButtonCommon from '../../../../components/ButtonCommon';
 import InputField from '../../../../components/InputField';
 import { useForm } from 'react-hook-form';
 import '../../styles/Signup.css';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
+import Checkbox from '../../../../components/Checkbox';
 
 const SignupForm = ({ onSubmitForm, onSignup }) => {
     const navigate = useNavigate();
+
+    const [checked, setChecked] = useState(false);
+
+    const onChangeListener = () => {
+        setChecked(!checked)
+    }
 
     const {
         reset,
@@ -74,6 +81,9 @@ const SignupForm = ({ onSubmitForm, onSignup }) => {
                     })}
                     errors={errors}
                 />
+                <Checkbox 
+                    label={"Enable 2FA?"} 
+                    register={register("otp")} />
             </div>
             <div className='buttonContainer'>
                 <ButtonCommon
@@ -81,7 +91,6 @@ const SignupForm = ({ onSubmitForm, onSignup }) => {
                     type="submit"
                     classButton='submitButton'
                     classText='submitText'
-                    onClick={onSubmitForm}
                 />
             </div>
         </form>

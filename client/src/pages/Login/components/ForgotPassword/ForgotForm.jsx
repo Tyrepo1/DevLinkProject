@@ -50,7 +50,6 @@ const ForgotForm = ({ onSubmitForm }) => {
                     type="submit"
                     classButton='submitButton'
                     classText='submitText'
-                    onClick={onSubmitForm}
                 />
             </div>
         </form>

@@ -2,10 +2,12 @@ import { addDoc, collection, getDocs, query, where, getFirestore } from "firebas
 import { getDataParams } from "../../core/DB";
 import { db } from '../../core/firestore';
 import { GET_OTP, baseurl } from "../configAPI";
+import { useState } from "react";
 
 const firestore = getFirestore();
 
 export const saveUser = async (data) => {
+
     try {
         // Check if username is unique
         const q = query(collection(firestore, 'users'), where('usernameLower', '==', data.name.toLowerCase())); 
@@ -13,7 +15,7 @@ export const saveUser = async (data) => {
 
         if (!exist.empty) {
             console.log("User already exists");
-            return null;
+            return {success: false, qr: false, message: "User already exists"};
         }
 
         const account = {
@@ -24,12 +26,17 @@ export const saveUser = async (data) => {
             usernameLower: data.name.toLowerCase(),
         };
 
-        // Fetch the OTP data from the API
-        const url = `${baseurl}${GET_OTP}`;
-        const response = await getDataParams(url, {username: account.username});
-        const { totpKey, qrCodeUrl } = response;
-        account.secret = totpKey;
-
+        if (data.otp) {
+            // Fetch the OTP data from the API
+            const url = `${baseurl}${GET_OTP}`;
+            const response = await getDataParams(url, { username: account.username });
+            const { totpKey, qrCodeUrl } = response;
+            account.secret = totpKey;
+            // Save the user data to Firestore
+            const docRef = await addDoc(collection(db, 'users'), account);
+            return {success: true, qr: true, message: qrCodeUrl};
+        }
+        
         // Save the user data to Firestore
         const docRef = await addDoc(collection(db, 'users'), account);
 
@@ -37,7 +44,7 @@ export const saveUser = async (data) => {
         console.log('User added successfully');
         console.log('Document reference:', docRef);
 
-        return qrCodeUrl;
+        return {success: true, qr: false, message: "User successfully signed in"};
     } catch (error) {
         // Handle errors (log details for debugging)
         console.error('Error adding document:', error);

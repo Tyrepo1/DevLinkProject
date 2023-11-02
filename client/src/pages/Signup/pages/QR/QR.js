@@ -11,15 +11,6 @@ const QR = () => {
     navigate('/'); // Navigate back to the home page
   };
 
-  useEffect(() => {
-    // Check if the 'qr' item exists in local storage
-    const storedQr = localStorage.getItem('qr');
-    if (!storedQr) {
-      console.log('Missing qr!');
-      navigate("/login")
-    }
-  }, []);
-
   return (
     <div>
       <center>
