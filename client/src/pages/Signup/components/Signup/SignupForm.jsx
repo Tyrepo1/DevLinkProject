@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import ButtonCommon from '../../../../components/ButtonCommon';
-import InputField from '../../../../components/InputField';
 import { useForm } from 'react-hook-form';
-import '../../styles/Signup.css';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
-import Checkbox from '../../../../components/Checkbox';
+import { Button, TextField, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import InputField from '../../../../components/InputField';
 
 const SignupForm = ({ onSubmitForm, onSignup }) => {
     const navigate = useNavigate();
@@ -23,75 +21,73 @@ const SignupForm = ({ onSubmitForm, onSignup }) => {
         control,
         formState: { errors },
     } = useForm({});
-    const resetForm = () => {
-        reset();
-        onSubmitForm({});
-    };
-
-    const forgotPassword = () => {
-        navigate("/forgot-password")
-    }
       
   return (
-    <div className='signupContainer'>
+    <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
-        className='signupForm'
         noValidate
         >
-            <div className='inputContainer'>
+            <div>
                 <InputField
-                    title={"email"}
-                    keyName={"email"}
-                    placeholder={"Enter your email"}
-                    register={register("email", {
-                        required: 'Please enter your email',
+                    keyName="email"
+                    required={true}
+                    label="Email"
+                    register={{...register("email", {
+                        required: "Email is required",
                         pattern: {
                             value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                             message: "Invalid email format",
-                        }
-                    })}
-                    errors={errors}
-                />
+                        }})}}
+                    errors={errors}/>
                 <InputField
-                    title={"username"}
-                    keyName={"name"}
-                    placeholder={"Enter your username"}
-                    register={register("name", {
-                        required: 'Please enter your username',
+                    keyName="name"
+                    required={true}
+                    label="Username"
+                    register={{...register("name", {
+                        required: "Username is required",
                         minLength: {
                             value: 8,
                             message: "Username needs to be 8 characters or longer"
-                        }
-                    })}
-                    errors={errors}
-                />
+                        }})}}
+                    errors={errors}/>
                 <InputField
-                    title={"password"}
-                    keyName={"password"}
-                    placeholder={"Enter your password"}
-                    type={"password"}
-                    register={register("password", {
-                        required: 'Please enter your password',
+                    keyName="password"
+                    type='password'
+                    required={true}
+                    label="Password"
+                    register={{...register("password", {
+                        required: "Password is required",
                         minLength: {
                             value: 8,
                             message: "Password needs to be 8 characters or longer"
-                        }
-                    })}
-                    errors={errors}
-                />
-                <Checkbox 
-                    label={"Enable 2FA?"} 
-                    register={register("otp")} />
+                        }})}}
+                    errors={errors}/> 
+                <FormGroup>
+                    <FormControlLabel 
+                        control={<Checkbox {...register("otp")} />} label="Enable 2FA?" />
+                </FormGroup>
+                
             </div>
-            <div className='buttonContainer'>
-                <ButtonCommon
-                    title="Signup"
-                    type="submit"
-                    classButton='submitButton'
-                    classText='submitText'
-                />
+            <div className='my-10'>
+                <Button
+                    type='submit'
+                    variant='contained'
+                    fullWidth
+                    sx={{
+                        height: "3rem",
+                        mb: "1rem"
+                    }}
+                >Sign Up</Button>
+                <Button
+                    variant='outlined'
+                    fullWidth
+                    sx={{
+                        height: "3rem",
+                        mb: "2rem"
+                    }}
+                >Sign In</Button>
             </div>
         </form>
         <DevTool control={control}/>

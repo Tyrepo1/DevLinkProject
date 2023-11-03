@@ -32,7 +32,7 @@ function OTP() {
     return (
         <div>
             <Popup isOpen={isOpen} closePopup={closePopup} children={message} />
-            <div className='LoginForm'>
+            <div className='flex items-center justify-center h-screen'>
             <OTPForm onSubmitForm={handleSubmitForm} />
             </div>
         </div>

@@ -13,21 +13,26 @@ function Signup() {
   const [message, setMessage] = useState("Empty message")
   const [success, setSuccess] = useState(false)
   const [qr, setQR] = useState(false)
+  const [severity, setSeverity] = useState("error")
 
   const handleFormSubmit = (data) => {
+    setOpen(false)
     if (!!data.email && !!data.name && !!data.password) {
       saveUser(data)
         .then((result) => {
           setSuccess(result.success)
           setQR(result.qr)
           if (!result.success) {
+            setSeverity("error")
             setMessage(result.message)
             setOpen(true)
           } else if(result.qr) {
+            setSeverity("success")
             localStorage.setItem("qr", result.message);
             setMessage("Please scan youre 2FA QR code in the next screen")
             setOpen(true)
           } else{
+            setSeverity("success")
             setMessage(result.message)
             setOpen(true)
           }
@@ -51,8 +56,8 @@ function Signup() {
   }
   return (
     <div>
-      <Popup isOpen={isOpen} closePopup={closePopup} children={message} />
-      <div className='LoginForm'>
+      <Popup isOpen={isOpen} closePopup={closePopup} children={message} severity={severity} />
+      <div className='flex items-center justify-center h-screen'>
         <SignupForm onSubmitForm={handleFormSubmit} onSignup={null}/>
       </div>
       

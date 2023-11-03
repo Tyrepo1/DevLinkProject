@@ -4,6 +4,11 @@ import Login from "./pages/Login/pages/Login/Login";
 import QR from "./pages/Signup/pages/QR/QR";
 import Signup from "./pages/Signup/pages/Signup/Signup";
 import OTP from "./pages/Login/pages/OTP/OTP";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import './App.css'
 
 function App() {
 

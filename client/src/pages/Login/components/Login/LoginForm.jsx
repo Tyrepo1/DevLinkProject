@@ -1,10 +1,10 @@
-import React from 'react';
-import ButtonCommon from '../../../../components/ButtonCommon';
-import InputField from '../../../../components/InputField';
-import { useForm } from 'react-hook-form';
-import '../../styles/Login.css';
 import { DevTool } from '@hookform/devtools';
+import { Button } from '@mui/material';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
+import InputField from '../../../../components/InputField';
+import '../../styles/Login.css';
 
 const LoginForm = ({ onSubmitForm, onSignup }) => {
     const navigate = useNavigate();
@@ -16,61 +16,66 @@ const LoginForm = ({ onSubmitForm, onSignup }) => {
         control,
         formState: { errors },
     } = useForm({});
-    const resetForm = () => {
-        reset();
-        onSubmitForm({});
-    };
 
     const forgotPassword = () => {
         navigate("/forgot-password")
     }
       
   return (
-    <div className='loginContainer'>
+    <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
-        className='loginForm'
         noValidate
         >
-            <ButtonCommon
-                    title="Sign Up"
-                    type="button"
-                    classButton='signupButton'
-                    classText='signupText'
-                    onClick={onSignup}
-                />
-            <div className='inputContainer'>
+            
+            <div>
                 <InputField
-                    title={"username"}
-                    keyName={"name"}
-                    placeholder={"Enter your username"}
-                    register={register("name", {
-                        required: 'Please enter your username'
-                    })}
-                    errors={errors}
-                />
+                    keyName="name"
+                    required={true}
+                    label="Username"
+                    register={{...register("name", {
+                        required: "Username is required",
+                        minLength: {
+                            value: 8,
+                            message: "Username needs to be 8 characters or longer"
+                        }})}}
+                    errors={errors}/>
                 <InputField
-                    title={"password"}
-                    keyName={"password"}
-                    placeholder={"Enter your password"}
-                    type={"password"}
-                    register={register("password", {
-                        required: 'Please enter your password'
-                    })}
-                    errors={errors}
-                />
+                    keyName="password"
+                    type='password'
+                    required={true}
+                    label="Password"
+                    register={{...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                            value: 8,
+                            message: "Password needs to be 8 characters or longer"
+                        }})}}
+                    errors={errors}/> 
             </div>
-            <div className='buttonContainer'>
-                <ButtonCommon
-                    title="Login"
-                    type="submit"
-                    classButton='submitButton'
-                    classText='submitText'
-                />
+            <div className='my-8'>
+                <Button
+                    type='submit'
+                    variant='contained'
+                    fullWidth
+                    sx={{
+                        height: "3rem",
+                        mb: "1rem"
+                    }}
+                >Sign In</Button>
+                <Button
+                    variant='outlined'
+                    size='medium'
+                    onClick={onSignup}
+                    fullWidth
+                    sx={{
+                        height: "3rem"
+                    }}
+                >Sign Up</Button>
             </div>
         </form>
-        <a className="forgotPassword" onClick={forgotPassword}>Forgot password?</a>
+        <a className="hover:cursor-pointer" onClick={forgotPassword}>Forgot password?</a>
         <DevTool control={control}/>
     </div>
     

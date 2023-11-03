@@ -12,7 +12,7 @@ function ForgotPassword() {
   }
   return (
     <div>
-      <div className='LoginForm'>
+      <div className='flex items-center justify-center h-screen'>
         <ForgotForm onSubmitForm={handleFormSubmit}/>
       </div>
       

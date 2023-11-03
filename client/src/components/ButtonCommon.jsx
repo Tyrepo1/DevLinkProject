@@ -1,8 +1,10 @@
+import {Button} from '@mui/base'
+
 const ButtonCommon = ({ icon, title ,classButton="",classText="",type,onClick=() => {
   
 }}) => {
   return (
-    <button
+    <Button
       type={type}
       onClick={onClick}
       className={`${classButton}` }
@@ -22,7 +24,7 @@ const ButtonCommon = ({ icon, title ,classButton="",classText="",type,onClick=()
       >
         {title}
       </div>
-    </button>
+    </Button>
   );
 };
 export default ButtonCommon;

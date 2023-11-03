@@ -1,34 +1,31 @@
 import React from "react";
 import "../styles/InputField.css"
+import { TextField } from "@mui/material";
 
 const InputField = ({
-  title,
-  keyName,
-  placeholder,
+  required,
+  label,
   register,
-  maxLength,
-  type,
+  keyName,
   errors = {},
+  type,
 }) => {
-
   return (
-    <div>
-        <div >
-          <input
-            required
-            placeholder={placeholder}
-            {...register}
-            type= {type}
-            maxLength={maxLength}
-            className="inputText"
-          />
-        </div>
-        {errors[keyName] && (
-        <div style={{ fontSize: "12px", color: "#ff0000" , textAlign: "left", marginLeft: "20px"}}>
-          {`${errors[keyName].message}`}
-        </div>
-      )}
-    </div>
+    <TextField
+      type={type}
+      required={required}
+      id={required ? 'outlined-required' : 'outlined'}
+      label={label}
+      placeholder={"Enter your " + label?.toLowerCase()}
+      {...register}
+      fullWidth
+      error={!!errors[keyName]}
+      helperText={errors[keyName] ? `${errors[keyName].message}` : undefined}
+      sx={{
+        mb: "2rem"
+      }}
+    />
   );
 };
+
 export default InputField;
