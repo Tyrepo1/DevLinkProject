@@ -11,28 +11,35 @@ function Login() {
 
   const [isOpen, setOpen] = useState(false)
   const [message, setMessage] = useState("Empty message")
+  const [loading, setLoading] = useState(false)
 
   const handleFormSubmit = async (data) => {
     setOpen(false)
+    setLoading(true)
     loginUser(data)
       .then((result) => {
         console.log(result)
         if(result.success){
           localStorage.setItem("username", data.name)
           if(result.qr){
-            console.log("GGYKW: " + localStorage.getItem("username"))
+            localStorage.setItem("otp", true)
             navigate("/otp")
           }
           else{
+            localStorage.setItem("loggedIn", true)
             navigate("/")
           }
         }else{
           setMessage(result.message)
           setOpen(true)
+          setLoading(false)
         }
       })
       .catch((error) => {
+        setMessage("An unexpected error has appeared")
+        setOpen(true)
         console.error(error);
+        setLoading(false)
       });
   }
   const handleSignup = () => {
@@ -47,7 +54,7 @@ function Login() {
     <div>
       <Popup isOpen={isOpen} closePopup={closePopup} children={message} severity="error" />
       <div className='flex items-center justify-center h-screen'>
-        <LoginForm onSubmitForm={handleFormSubmit} onSignup={handleSignup}/>
+        <LoginForm onSubmitForm={handleFormSubmit} onSignup={handleSignup} loading={loading}/>
       </div>
       
     </div>

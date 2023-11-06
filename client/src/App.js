@@ -9,6 +9,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './App.css'
+import Home from "./pages/Home/pages/Home";
 
 function App() {
 
@@ -32,10 +33,19 @@ function App() {
 
   const ProtectedOTPRoute = ({ children }) => {
 
-    const username = localStorage.getItem("username")
-    console.log(username)
-    if (username == null) {
-      console.log("User not set for OTP")
+    const otp = localStorage.getItem("otp")
+    if (!otp) {
+      console.log("OTP is not enabled")
+      return <Navigate to="/login" replace />;
+    }
+    return children;
+  };
+
+  const ProtectedAuthRoute = ({ children }) => {
+
+    const loggedIn = localStorage.getItem("loggedIn")
+    if (!loggedIn) {
+      console.log("User is not logged in")
       return <Navigate to="/login" replace />;
     }
     return children;
@@ -49,6 +59,8 @@ function App() {
           <Route path="/signup" element={<ProtectedRoute><Signup /></ProtectedRoute>} />
           <Route path='/qr' element={<ProtectedQRRoute><QR /></ProtectedQRRoute>} />
           <Route path="/otp" element={<ProtectedOTPRoute><OTP /></ProtectedOTPRoute>}/>
+          <Route path="/home" element={<ProtectedAuthRoute><Home /></ProtectedAuthRoute>}/>
+          <Route path="/*" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>
   )

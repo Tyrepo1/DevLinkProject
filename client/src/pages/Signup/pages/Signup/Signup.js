@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react'
-import SignupForm from '../../components/Signup/SignupForm';
-import "../../styles/Signup.css"
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { saveUser } from '../../../../api/Signup/signupAPI';
 import Popup from '../../../../components/Popup';
+import SignupForm from '../../components/Signup/SignupForm';
+import "../../styles/Signup.css";
 
 function Signup() {
 
@@ -11,54 +11,47 @@ function Signup() {
 
   const [isOpen, setOpen] = useState(false)
   const [message, setMessage] = useState("Empty message")
-  const [success, setSuccess] = useState(false)
-  const [qr, setQR] = useState(false)
   const [severity, setSeverity] = useState("error")
+  const [loading, setLoading] = useState(false)
+
+  const handeSignIn = () => {
+    navigate("/login")
+  }
 
   const handleFormSubmit = (data) => {
     setOpen(false)
+    setLoading(true)
     if (!!data.email && !!data.name && !!data.password) {
       saveUser(data)
         .then((result) => {
-          setSuccess(result.success)
-          setQR(result.qr)
           if (!result.success) {
             setSeverity("error")
             setMessage(result.message)
             setOpen(true)
           } else if(result.qr) {
-            setSeverity("success")
             localStorage.setItem("qr", result.message);
-            setMessage("Please scan youre 2FA QR code in the next screen")
-            setOpen(true)
+            navigate("/qr", { state: { alertMessage: "Please scan the QR code below with the Authenticator app to get your OTP code" } })
           } else{
-            setSeverity("success")
-            setMessage(result.message)
-            setOpen(true)
+            navigate("qr")
           }
         })
         .catch((error) => {
+          setMessage("An unexpected error has appeared")
+          setOpen(true)
           console.error(error);
+          setLoading(false)
         });
     }
   }
 
   const closePopup = () => {
     setOpen(false)
-    if(success){
-      if(qr){
-        navigate("/qr")
-      }else{
-        navigate("/login")
-      }
-      
-    }
   }
   return (
     <div>
       <Popup isOpen={isOpen} closePopup={closePopup} children={message} severity={severity} />
       <div className='flex items-center justify-center h-screen'>
-        <SignupForm onSubmitForm={handleFormSubmit} onSignup={null}/>
+        <SignupForm onSubmitForm={handleFormSubmit} onSignup={handeSignIn} loading={loading}/>
       </div>
       
     </div>

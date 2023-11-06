@@ -1,18 +1,10 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
-import { useNavigate } from "react-router-dom";
-import { Button, TextField, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import InputField from '../../../../components/InputField';
 
-const SignupForm = ({ onSubmitForm, onSignup }) => {
-    const navigate = useNavigate();
-
-    const [checked, setChecked] = useState(false);
-
-    const onChangeListener = () => {
-        setChecked(!checked)
-    }
+const SignupForm = ({ onSubmitForm, onSignup, loading }) => {
 
     const {
         reset,
@@ -79,8 +71,10 @@ const SignupForm = ({ onSubmitForm, onSignup }) => {
                         height: "3rem",
                         mb: "1rem"
                     }}
+                    disabled={loading}
                 >Sign Up</Button>
                 <Button
+                    onClick={onSignup}
                     variant='outlined'
                     fullWidth
                     sx={{

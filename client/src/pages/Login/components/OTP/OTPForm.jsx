@@ -1,13 +1,12 @@
 import React from 'react';
-import ButtonCommon from '../../../../components/ButtonCommon';
+import { Button } from '@mui/material';
 import InputField from '../../../../components/InputField';
 import { useForm } from 'react-hook-form';
 import '../../styles/Login.css';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from "react-router-dom";
 
-const OTPForm = ({ onSubmitForm }) => {
-    const navigate = useNavigate();
+const OTPForm = ({ onSubmitForm, loading }) => {
 
     const {
         reset,
@@ -23,7 +22,7 @@ const OTPForm = ({ onSubmitForm }) => {
 
       
   return (
-    <div className='loginContainer'>
+    <div className='border-solid shadow-2xl h-fit w-96 text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
@@ -32,22 +31,24 @@ const OTPForm = ({ onSubmitForm }) => {
         >
             <div className='inputContainer'>
                 <InputField
-                    title={"OTP"}
-                    keyName={"otp"}
-                    placeholder={"Enter your OTP"}
-                    register={register("otp", {
-                        required: 'Please enter your OTP'
-                    })}
-                    errors={errors}
-                />
+                    keyName="otp"
+                    required={true}
+                    label="OTP"
+                    register={{...register("otp", {
+                        required: "OTP is required"})}}
+                    errors={errors}/>
             </div>
             <div className='buttonContainer'>
-                <ButtonCommon
-                    title="Submit"
-                    type="submit"
-                    classButton='submitButton'
-                    classText='submitText'
-                />
+                <Button
+                    type='submit'
+                    variant='contained'
+                    fullWidth
+                    disabled={loading}
+                    sx={{
+                        height: "3rem",
+                        mb: "1rem"
+                    }}
+                >Submit</Button>
             </div>
         </form>
         <DevTool control={control}/>

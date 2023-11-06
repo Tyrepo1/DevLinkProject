@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import InputField from '../../../../components/InputField';
 import '../../styles/Login.css';
 
-const LoginForm = ({ onSubmitForm, onSignup }) => {
+const LoginForm = ({ onSubmitForm, onSignup, loading }) => {
     const navigate = useNavigate();
 
     const {
@@ -63,6 +63,7 @@ const LoginForm = ({ onSubmitForm, onSignup }) => {
                         height: "3rem",
                         mb: "1rem"
                     }}
+                    disabled={loading}
                 >Sign In</Button>
                 <Button
                     variant='outlined'
