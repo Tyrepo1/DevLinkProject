@@ -20,6 +20,17 @@ const OTPForm = ({ onSubmitForm, loading }) => {
         onSubmitForm({});
     };
 
+    const inputFields = [
+        {
+            keyName: 'otp',
+            type: 'text',
+            label: 'OTP',
+            validation: {
+              required: 'OTP is required',
+            },
+        },
+      ];
+
       
   return (
     <div className='border-solid shadow-2xl h-fit w-96 text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
@@ -30,13 +41,17 @@ const OTPForm = ({ onSubmitForm, loading }) => {
         noValidate
         >
             <div className='inputContainer'>
-                <InputField
-                    keyName="otp"
-                    required={true}
-                    label="OTP"
-                    register={{...register("otp", {
-                        required: "OTP is required"})}}
-                    errors={errors}/>
+                {inputFields.map((field) => (
+                        <InputField
+                        key={field.keyName}
+                        keyName={field.keyName}
+                        type={field.type}
+                        required={true}
+                        label={field.label}
+                        register={{ ...register(field.keyName, field.validation) }}
+                        errors={errors}
+                        />
+                    ))}
             </div>
             <div className='buttonContainer'>
                 <Button

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { validateOTP } from '../../../../api/Login/loginAPI';
 import Popup from '../../../../components/Popup';
 import OTPForm from '../../components/OTP/OTPForm';
+import backgroundImage from '../../../../images/background.png'
 
 function OTP() {
 
@@ -28,17 +29,19 @@ function OTP() {
                 if(!result.success){
                     setMessage(result.message)
                     setOpen(true)
-                    setLoading(false)
                 }else{
                     localStorage.removeItem("otp")
                     localStorage.setItem("loggedIn", true)
                     navigate("/home")
                 }
-            })
+            }).finally(
+                setLoading(false)
+            )
     }
 
     return (
         <div>
+            <img className=' absolute w-screen bg-white h-screen -z-50' src={backgroundImage} alt='Background'/>
             {alertMessage && (
             <Popup isOpen={alerted} closePopup={closePopup} children={alertMessage} severity="success" />
             )}

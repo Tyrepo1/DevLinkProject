@@ -13,49 +13,65 @@ const SignupForm = ({ onSubmitForm, onSignup, loading }) => {
         control,
         formState: { errors },
     } = useForm({});
+
+    const inputFields = [
+        {
+          keyName: 'email',
+          type: 'text',
+          label: 'Email',
+          validation: {
+            required: 'Email is required',
+            pattern: {
+              value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+              message: 'Invalid email format',
+            },
+          },
+        },
+        {
+          keyName: 'name',
+          type: 'text',
+          label: 'Username',
+          validation: {
+            required: 'Username is required',
+            minLength: {
+              value: 8,
+              message: 'Username needs to be 8 characters or longer',
+            },
+          },
+        },
+        {
+          keyName: 'password',
+          type: 'password',
+          label: 'Password',
+          validation: {
+            required: 'Password is required',
+            minLength: {
+              value: 8,
+              message: 'Password needs to be 8 characters or longer',
+            },
+          },
+        },
+      ];
       
   return (
-    <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center'>
+    <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center bg-white'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
         noValidate
         >
             <div>
-                <InputField
-                    keyName="email"
+                {inputFields.map((field) => (
+                    <InputField
+                    key={field.keyName}
+                    keyName={field.keyName}
+                    type={field.type}
                     required={true}
-                    label="Email"
-                    register={{...register("email", {
-                        required: "Email is required",
-                        pattern: {
-                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                            message: "Invalid email format",
-                        }})}}
-                    errors={errors}/>
-                <InputField
-                    keyName="name"
-                    required={true}
-                    label="Username"
-                    register={{...register("name", {
-                        required: "Username is required",
-                        minLength: {
-                            value: 8,
-                            message: "Username needs to be 8 characters or longer"
-                        }})}}
-                    errors={errors}/>
-                <InputField
-                    keyName="password"
-                    type='password'
-                    required={true}
-                    label="Password"
-                    register={{...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                            value: 8,
-                            message: "Password needs to be 8 characters or longer"
-                        }})}}
-                    errors={errors}/> 
+                    label={field.label}
+                    register={{ ...register(field.keyName, field.validation) }}
+                    errors={errors}
+                    />
+                ))}
                 <FormGroup>
                     <FormControlLabel 
                         control={<Checkbox {...register("otp")} />} label="Enable 2FA?" />

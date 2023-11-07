@@ -3,6 +3,7 @@ import ForgotForm from '../../components/ForgotPassword/ForgotForm'
 import "../../styles/Login.css"
 import Popup from '../../../../components/Popup'
 import { findUser } from '../../../../api/ForgotPassword/forgotPasswordAPI'
+import backgroundImage from '../../../../images/background.png'
 
 
 import { useNavigate } from 'react-router-dom';
@@ -39,14 +40,16 @@ function ForgotPassword() {
           }else{
             setMessage(result.message)
             setOpen(true)
-            setLoading(false)
           }
-        })
+        }).finally(
+          setLoading(false)
+        )
     }
     
   }
   return (
     <div>
+      <img className=' absolute w-screen h-screen -z-50' src={backgroundImage} alt='Background'/>
       <Popup isOpen={isOpen} closePopup={closePopup} children={message} severity="error" />
       <div className='flex items-center justify-center h-screen'>
         <ForgotForm onSubmitForm={handleFormSubmit}loading={loading}/>

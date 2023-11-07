@@ -9,6 +9,34 @@ import '../../styles/Login.css';
 const LoginForm = ({ onSubmitForm, onSignup, loading }) => {
     const navigate = useNavigate();
 
+    const inputFields = [
+        {
+          keyName: 'name',
+          type: 'text',
+          label: 'Username',
+          validation: {
+            required: 'Username is required',
+            minLength: {
+              value: 8,
+              message: 'Username needs to be 8 characters or longer',
+            },
+          },
+        },
+        {
+          keyName: 'password',
+          type: 'password',
+          label: 'Password',
+          validation: {
+            required: 'Password is required',
+            minLength: {
+              value: 8,
+              message: 'Password needs to be 8 characters or longer',
+            },
+          },
+        },
+      ];
+      
+
     const {
         reset,
         register,
@@ -22,7 +50,7 @@ const LoginForm = ({ onSubmitForm, onSignup, loading }) => {
     }
       
   return (
-    <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
+    <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center flex-col bg-white'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
@@ -30,29 +58,17 @@ const LoginForm = ({ onSubmitForm, onSignup, loading }) => {
         >
             
             <div>
-                <InputField
-                    keyName="name"
+                {inputFields.map((field) => (
+                    <InputField
+                    key={field.keyName}
+                    keyName={field.keyName}
+                    type={field.type}
                     required={true}
-                    label="Username"
-                    register={{...register("name", {
-                        required: "Username is required",
-                        minLength: {
-                            value: 8,
-                            message: "Username needs to be 8 characters or longer"
-                        }})}}
-                    errors={errors}/>
-                <InputField
-                    keyName="password"
-                    type='password'
-                    required={true}
-                    label="Password"
-                    register={{...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                            value: 8,
-                            message: "Password needs to be 8 characters or longer"
-                        }})}}
-                    errors={errors}/> 
+                    label={field.label}
+                    register={{ ...register(field.keyName, field.validation) }}
+                    errors={errors}
+                    />
+                ))}
             </div>
             <div className='my-8'>
                 <Button

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from '../../../../api/Login/loginAPI';
 import LoginForm from '../../components/Login/LoginForm';
 import "../../styles/Login.css";
+import backgroundImage from '../../../../images/background.png'
 
 function Login() {
 
@@ -32,15 +33,15 @@ function Login() {
         }else{
           setMessage(result.message)
           setOpen(true)
-          setLoading(false)
         }
       })
       .catch((error) => {
         setMessage("An unexpected error has appeared")
         setOpen(true)
         console.error(error);
+      }).finally(
         setLoading(false)
-      });
+      );
   }
   const handleSignup = () => {
     navigate("/signup")
@@ -52,6 +53,7 @@ function Login() {
   return (
     
     <div>
+      <img className=' absolute w-screen h-screen -z-50' src={backgroundImage} alt='Background'/>
       <Popup isOpen={isOpen} closePopup={closePopup} children={message} severity="error" />
       <div className='flex items-center justify-center h-screen'>
         <LoginForm onSubmitForm={handleFormSubmit} onSignup={handleSignup} loading={loading}/>

@@ -4,6 +4,7 @@ import { saveUser } from '../../../../api/Signup/signupAPI';
 import Popup from '../../../../components/Popup';
 import SignupForm from '../../components/Signup/SignupForm';
 import "../../styles/Signup.css";
+import backgroundImage from '../../../../images/background.png'
 
 function Signup() {
 
@@ -39,8 +40,9 @@ function Signup() {
           setMessage("An unexpected error has appeared")
           setOpen(true)
           console.error(error);
+        }).finally(
           setLoading(false)
-        });
+        );
     }
   }
 
@@ -49,6 +51,7 @@ function Signup() {
   }
   return (
     <div>
+      <img className=' absolute w-screen h-screen -z-50' src={backgroundImage} alt='Background'/>
       <Popup isOpen={isOpen} closePopup={closePopup} children={message} severity={severity} />
       <div className='flex items-center justify-center h-screen'>
         <SignupForm onSubmitForm={handleFormSubmit} onSignup={handeSignIn} loading={loading}/>

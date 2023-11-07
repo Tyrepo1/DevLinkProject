@@ -24,6 +24,17 @@ const ForgotForm = ({ onSubmitForm, loading }) => {
     const forgotPassword = () => {
         navigate("/forgot-password")
     }
+
+    const inputFields = [
+        {
+            keyName: 'nameAndEmail',
+            type: 'text',
+            label: 'Username',
+            validation: {
+              required: 'Username is required',
+            },
+        },
+      ];
       
   return (
     <div className='loginContainer'>
@@ -33,14 +44,18 @@ const ForgotForm = ({ onSubmitForm, loading }) => {
         className='loginForm'
         noValidate
         >
-            <div className='border-solid shadow-2xl h-fit w-96 text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
-                <InputField
-                    keyName="nameAndEmail"
-                    required={true}
-                    label="Username"
-                    register={{...register("nameAndEmail", {
-                        required: "Enter your username"})}}
-                    errors={errors}/> 
+            <div className='border-solid shadow-2xl h-fit w-96 text-center p-8 rounded-2xl bg-white py-28 flex items-center flex-col'>
+                {inputFields.map((field) => (
+                            <InputField
+                            key={field.keyName}
+                            keyName={field.keyName}
+                            type={field.type}
+                            required={true}
+                            label={field.label}
+                            register={{ ...register(field.keyName, field.validation) }}
+                            errors={errors}
+                            />
+                        ))}
                 <Button
                     variant='contained'
                     type="submit"
