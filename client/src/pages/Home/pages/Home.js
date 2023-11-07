@@ -1,8 +1,17 @@
 import React from 'react'
+import TopNav from '../components/TopNav'
+import Hero from '../components/Hero'
+import SuccessStories from '../components/SuccessStories'
 
 function Home() {
   return (
-    <div>Home</div>
+
+    <div>
+      <TopNav/>
+      <Hero/>
+      <SuccessStories/>
+      Home
+    </div>
   )
 }
 

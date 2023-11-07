@@ -33,7 +33,7 @@ const OTPForm = ({ onSubmitForm, loading }) => {
 
       
   return (
-    <div className='border-solid shadow-2xl h-fit w-96 text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
+    <div className='border-solid shadow-2xl h-fit w-96 bg-white text-center p-8 rounded-2xl py-28 flex items-center flex-col'>
         <form
         onSubmit={handleSubmit(onSubmitForm)}
         autoComplete='off'
