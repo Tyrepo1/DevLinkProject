@@ -10,14 +10,17 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './App.css'
 import Home from "./pages/Home/pages/Home";
+import DevListPage from "./pages/DevList/pages/DevListPage";
+import DetailDev from "./pages/DevList/pages/DetailDev";
+import DashboardPage from "./pages/Dashboard/pages/DashboardPage";
 
 function App() {
 
   const ProtectedRoute = ({ children }) => {
     const loggedIn = localStorage.getItem("loggedIn")
-    if (loggedIn) {
+    if (loggedIn === "true") {
       console.log("User is already logged in")
-      return <Navigate to="/" replace />;
+      return <Navigate to="/dashboard" replace />;
     }
     return children;
   };
@@ -34,7 +37,7 @@ function App() {
   const ProtectedOTPRoute = ({ children }) => {
 
     const otp = localStorage.getItem("otp")
-    if (!otp) {
+    if (otp !== "true") {
       console.log("OTP is not enabled")
       return <Navigate to="/login" replace />;
     }
@@ -59,7 +62,10 @@ function App() {
           <Route path="/signup" element={<ProtectedRoute><Signup /></ProtectedRoute>} />
           <Route path='/qr' element={<ProtectedQRRoute><QR /></ProtectedQRRoute>} />
           <Route path="/otp" element={<ProtectedOTPRoute><OTP /></ProtectedOTPRoute>}/>
-          <Route path="/home" element={<ProtectedAuthRoute><Home /></ProtectedAuthRoute>}/>
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>}/>
+          <Route path="/find-dev" element={<ProtectedAuthRoute><DevListPage /></ProtectedAuthRoute>}/>
+          <Route path="/find-dev/:id" element={<ProtectedAuthRoute><DetailDev /></ProtectedAuthRoute>}/>
+          <Route path="/dashboard" element={<ProtectedAuthRoute><DashboardPage /></ProtectedAuthRoute>}/>
           <Route path="/*" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>

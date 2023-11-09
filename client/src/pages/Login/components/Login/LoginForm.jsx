@@ -48,6 +48,9 @@ const LoginForm = ({ onSubmitForm, onSignup, loading }) => {
     const forgotPassword = () => {
         navigate("/forgot-password")
     }
+    const guestLogin = () => {
+        navigate("/home")
+    }
       
   return (
     <div className='border-solid shadow-2xl h-fit w-fit text-center p-8 rounded-2xl py-28 flex items-center flex-col bg-white'>
@@ -93,6 +96,8 @@ const LoginForm = ({ onSubmitForm, onSignup, loading }) => {
             </div>
         </form>
         <a className="hover:cursor-pointer" onClick={forgotPassword}>Forgot password?</a>
+        <br></br>
+        <a className="hover:cursor-pointer" onClick={guestLogin}>Continue as a guest</a>
         <DevTool control={control}/>
     </div>
     
