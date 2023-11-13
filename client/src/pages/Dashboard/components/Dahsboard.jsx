@@ -1,9 +1,11 @@
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import AddIcon from '@mui/icons-material/Add';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
@@ -22,20 +24,17 @@ import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoNoBackground from '../../../images/devlink-logo/png/logo-no-background.png';
-import { Typography } from '@mui/material';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AddIcon from '@mui/icons-material/Add';
-import DevListPage from '../../DevList/pages/DevListPage'
-import Home from '../../Home/pages/Home'
-import Login from '../../Login/pages/Login/Login';
+import CreateProfile from '../../CreateProfile/pages/CreateProfile';
+import DevListPage from '../../DevList/pages/DevListPage';
+import Home from '../../Home/pages/Home';
+import Analytics from '../../Analytics/pages/Analytics';
 
 const drawerWidth = 240;
 
 const menuItems = [
-  { key: 'dashboard', icon: <PersonSearchIcon />, text: 'Dashboard', content: <DevListPage /> },
-  { key: 'findDev', icon: <DashboardIcon />, text: 'Find developer', content: <Home /> },
-  { key: 'createProfile', icon: <AddIcon />, text: 'Create profile', content: <Login /> },
+  { key: 'dashboard', icon: <PersonSearchIcon />, text: 'Dashboard', content: <Analytics /> },
+  { key: 'findDev', icon: <DashboardIcon />, text: 'Find developer', content: <DevListPage /> },
+  { key: 'createProfile', icon: <AddIcon />, text: 'Create profile', content: <CreateProfile /> },
 ];
 
 function Dashboard(props) {
