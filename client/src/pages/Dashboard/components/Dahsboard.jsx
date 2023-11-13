@@ -1,5 +1,6 @@
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddIcon from '@mui/icons-material/Add';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -24,10 +25,10 @@ import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoNoBackground from '../../../images/devlink-logo/png/logo-no-background.png';
+import Analytics from '../../Analytics/pages/Analytics';
+import Chat from '../../Chat/pages/Chat';
 import CreateProfile from '../../CreateProfile/pages/CreateProfile';
 import DevListPage from '../../DevList/pages/DevListPage';
-import Home from '../../Home/pages/Home';
-import Analytics from '../../Analytics/pages/Analytics';
 
 const drawerWidth = 240;
 
@@ -35,6 +36,7 @@ const menuItems = [
   { key: 'dashboard', icon: <PersonSearchIcon />, text: 'Dashboard', content: <Analytics /> },
   { key: 'findDev', icon: <DashboardIcon />, text: 'Find developer', content: <DevListPage /> },
   { key: 'createProfile', icon: <AddIcon />, text: 'Create profile', content: <CreateProfile /> },
+  { key: 'chat', icon: <ChatBubbleIcon />, text: 'Chat', content: <Chat /> },
 ];
 
 function Dashboard(props) {
