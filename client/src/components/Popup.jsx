@@ -20,7 +20,8 @@ const Popup = ({ isOpen, closePopup, children, severity }) => {
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
-          sx={{ mb: 2 }}
+          sx={{ mb: 2  }}
+          
         >
           {children}
         </Alert>

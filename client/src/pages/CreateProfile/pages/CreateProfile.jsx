@@ -1,15 +1,20 @@
+import { saveProfile } from '../../../api/CreateProfile/CreateProfileAPI'
 import ProfileForm from '../components/ProfileForm'
 
 import React from 'react'
 
-const handleFormSubmit = (value) => {
-    alert(JSON.stringify(value))
-}
 
-function CreateProfile() {
+
+function CreateProfile({profile, handleSubmit}) {
+
+  const handleFormSubmit = (value) => {
+    saveProfile(value)
+    handleSubmit()
+  }
+
   return (
     <div>
-        <ProfileForm onSubmitForm={handleFormSubmit}/>
+        <ProfileForm onSubmitForm={handleFormSubmit} profile={profile}/>
     </div>
   )
 }

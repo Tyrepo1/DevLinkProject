@@ -10,6 +10,7 @@ import Chart from '../components/LineChart';
 import Pie from '../components/PieChart';
 import StatViewer from '../components/StatViewer';
 import AgentsList from '../components/AgentsList';
+import { unansweredConversations } from '../../../api/Chat/ChatAPI';
 
 const statData = [
   { icon: <VisibilityIcon fontSize="large" />, name: "Total Views", unit: "views", value: "10000" },
@@ -167,38 +168,6 @@ const developers = [
     workEnvironment: "On-site",
   }, 
 ]
-const agentData = [
-  {
-    name: "John Smith",
-    company: "ABC",
-    message: "Hello, we would like to have you in for an interview!"
-  },
-  {
-    name: "Jane Doe",
-    company: "XYZ",
-    message: "We are impressed with your skills. Let's schedule an interview!"
-  },
-  {
-    name: "Alex Johnson",
-    company: "123 Corp",
-    message: "Greetings! Your application caught our attention. We'd like to discuss further."
-  },
-  {
-    name: "Emily Brown",
-    company: "Tech Innovators",
-    message: "Congratulations! You've been shortlisted. We'd love to meet you in person."
-  },
-  {
-    name: "Michael Davis",
-    company: "Global Solutions",
-    message: "Hello, we believe your experience aligns with our requirements. Let's arrange an interview."
-  },
-  {
-    name: "Sophia White",
-    company: "Infinite Technologies",
-    message: "We appreciate your interest. Can we schedule a call to discuss your application?"
-  },
-];
 
 const keyToLabel = {
   views: 'Total Views',
@@ -238,12 +207,9 @@ const fieldOptions = [
   { value: "willingnessToRelocate", label: "Willingness to Relocate" }
 ];
 
-const handleAgemtSelect = (agent) => {
-  alert(agent)
-}
-
-function Analytics() {
+function Analytics({handleAgentSelect}) {
   const [field, setField] = useState("skills");
+  const [agentData, setAgentData] = useState([])
   const [pieProps, setPieProps] = useState({
     name: "Popularity of fields",
     data: developers,
@@ -258,6 +224,16 @@ function Analytics() {
       keyName: field
     });
   }, [field])
+
+  useEffect(() => {
+    const unsubscribe = unansweredConversations((users) => {
+      setAgentData(users);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleChange = (event) => {
     setField(event.target.value);
@@ -294,7 +270,7 @@ function Analytics() {
           <Pie {...pieProps}/>
         </Grid>
         <Grid item xs={12}>
-          <AgentsList agentData={agentData} handleAgentSelect={handleAgemtSelect}/>
+          <AgentsList agentData={agentData} handleAgentSelect={handleAgentSelect}/>
         </Grid>
       </Grid>
     </div>

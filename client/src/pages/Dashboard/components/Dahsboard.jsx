@@ -29,24 +29,31 @@ import Analytics from '../../Analytics/pages/Analytics';
 import Chat from '../../Chat/pages/Chat';
 import CreateProfile from '../../CreateProfile/pages/CreateProfile';
 import DevListPage from '../../DevList/pages/DevListPage';
+import { startNewChat } from '../../../api/Chat/ChatAPI';
+import { getProfile } from '../../../api/CreateProfile/CreateProfileAPI';
+import Popup from '../../../components/Popup'
 
 const drawerWidth = 240;
-
-const menuItems = [
-  { key: 'dashboard', icon: <PersonSearchIcon />, text: 'Dashboard', content: <Analytics /> },
-  { key: 'findDev', icon: <DashboardIcon />, text: 'Find developer', content: <DevListPage /> },
-  { key: 'createProfile', icon: <AddIcon />, text: 'Create profile', content: <CreateProfile /> },
-  { key: 'chat', icon: <ChatBubbleIcon />, text: 'Chat', content: <Chat /> },
-];
 
 function Dashboard(props) {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = React.useState("dashboard");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [toUser, setToUser] = React.useState(null);
+  const [profile, setProfile] = React.useState(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("")
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const username = localStorage.getItem("username")
+
+  getProfile(username).then(
+    (result) => {
+      setProfile(result)
+    }
+  )
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -70,6 +77,40 @@ function Dashboard(props) {
     localStorage.setItem("loggedIn", false);
     navigate("/login");
   };
+
+  const handleSubmit = () => {
+    setMessage("Profile has been updated")
+    setIsOpen(true)
+    setSelectedItem("dashboard")
+  }
+
+  const handleAgentSelect = (agent) =>{
+    setToUser(agent)
+    setSelectedItem("chat")
+  }
+
+  const handleNameClicked = (dev) =>{
+    startNewChat(dev).then(
+      (result) => {
+        if(result){
+          setToUser(dev)
+          setSelectedItem("chat")
+        }
+        else{
+          alert("Something went wrong")
+        }    
+      }
+    )
+    
+  }
+
+  const menuItems = [
+    { key: 'dashboard', icon: <PersonSearchIcon />, text: 'Dashboard', content: <Analytics handleAgentSelect = {handleAgentSelect}/> },
+    { key: 'findDev', icon: <DashboardIcon />, text: 'Find developer', content: <DevListPage handleNameClicked = {handleNameClicked}/> },
+    { key: 'createProfile', icon: <AddIcon />, text: 'Create profile', content: <CreateProfile profile={profile} handleSubmit={handleSubmit}/> },
+    { key: 'chat', icon: <ChatBubbleIcon />, text: 'Chat', content: <Chat toUser={toUser}/> },
+  ];
+  
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -175,6 +216,10 @@ function Dashboard(props) {
     const selectedContent = menuItems.find((item) => item.key === selectedItem)?.content;
     return selectedContent || <div>Page not found</div>;
   };
+  
+  const closePopup = () => {
+    setIsOpen(false)
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -187,6 +232,7 @@ function Dashboard(props) {
         }}
       >
         <Toolbar>
+        <Popup isOpen={isOpen} severity={"success"} children={message} closePopup={closePopup} />
           <IconButton
             color="inherit"
             aria-label="open drawer"

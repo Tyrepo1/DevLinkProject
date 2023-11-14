@@ -15,12 +15,12 @@ import {
   Switch
 } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import InputField from '../../../components/InputField';
 import SkillsInput from './SkillsInput';
 
-const ProfileForm = ({ onSubmitForm }) => {
+const ProfileForm = ({ onSubmitForm, profile }) => {
   const {
     reset,
     register,
@@ -31,11 +31,24 @@ const ProfileForm = ({ onSubmitForm }) => {
     setValue,
   } = useForm({
     defaultValues: {
-      profilePicture: '',
-      bannerPicture: 'https://hinicio.com/wp-content/uploads/2022/08/placeholder-3.png',
-      resume: null
+      profilePicture: profile?.profilePicture,
+      bannerPicture: profile?.bannerPicture,
+      resume: null,
+      firstName: profile?.firstName,
+      lastName: profile?.lastName,
+      age: profile?.age,
+      location: profile?.location,
+      experienceLevel: profile?.experienceLevel,
+      educationLevel: profile?.educationLevel,
+      jobType: profile?.jobType,
+      workEnvironment: profile?.workEnvironment,
+      willingnessToRelocate: profile?.willingnessToRelocate,
+      skills: profile?.skills,
+      languages: profile?.languages,
+      isPublic: profile?.isPublic,
     }
   });
+
 
   const skills = useFieldArray({ control, name: 'skills' });
   const languages = useFieldArray({ control, name: 'languages' });
@@ -56,7 +69,15 @@ const ProfileForm = ({ onSubmitForm }) => {
 
   const handleUploadFile = (fieldKey, stateKey) => (event) => {
     const file = event.target.files[0];
-    setValue(stateKey, URL.createObjectURL(file));
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      const imageBase64Stringsep = base64String;
+      console.log(base64String);
+      setValue(stateKey, imageBase64Stringsep)
+  }
+  reader.readAsDataURL(file);
   };
 
   const handleKeyDown = (event) => {
@@ -77,9 +98,9 @@ const ProfileForm = ({ onSubmitForm }) => {
     <Container className="mt-8">
       <Paper elevation={3} className="p-6">
         <form onSubmit={handleSubmit(onSubmitForm)} onKeyDown={handleKeyDown}>
-          <input type="file" accept="image/*" style={{ display: 'none' }} id="upload-banner-picture" onChange={handleUploadFile('banner-picture', 'bannerPicture')} />
+          <input type="file" accept=".png" style={{ display: 'none' }} {...register('bannerPicture')} id="upload-banner-picture" onChange={handleUploadFile('banner-picture', 'bannerPicture')} />
           <div className="relative">
-            <img className="w-full h-64" src={bannerPictureValue} alt="Banner" />
+            <img className="w-full h-64" src={`data:image/png;base64,${bannerPictureValue}`} alt="Banner" />
             <EditIcon
               className="cursor-pointer text-white bg-blue-500 rounded-full p-1 absolute top-0 left-[calc(100%-2rem)]"
               onClick={(e) => {
@@ -89,9 +110,9 @@ const ProfileForm = ({ onSubmitForm }) => {
               sx={{ width: '2rem', height: '2rem' }}
             />
           </div>
-          <input type="file" accept="image/*" id="upload-profile-picture" {...register('bannerPicture')} style={{ display: 'none' }} onChange={handleUploadFile('profile-picture', 'profilePicture')} />
+          <input type="file" accept=".png" id="upload-profile-picture" {...register('profilePicture')} style={{ display: 'none' }} onChange={handleUploadFile('profile-picture', 'profilePicture')} />
           <div className="absolute top-[21rem]">
-            <Avatar alt="Profile" src={profilePictureValue} sx={{ width: '7rem', height: '7rem' }} />
+            <Avatar alt="Profile" src={`data:image/png;base64,${profilePictureValue}`} sx={{ width: '7rem', height: '7rem' }} />
             <EditIcon
               className="cursor-pointer text-white bg-blue-500 rounded-full p-1 absolute top-20 left-20"
               onClick={(e) => {
@@ -102,7 +123,7 @@ const ProfileForm = ({ onSubmitForm }) => {
             />
           </div>
           <div className="text-right">
-            <FormControlLabel control={<Switch {...register('isPublic')} />} label="Public Profile" />
+            <FormControlLabel control={<Switch {...register('isPublic')} defaultChecked={profile?.isPublic ? profile.isPublic : undefined} />} label="Public Profile" />
           </div>
           <Grid container spacing={3} sx={{ marginTop: '1rem' }}>
             {inputFields.map((field) => (
@@ -110,7 +131,7 @@ const ProfileForm = ({ onSubmitForm }) => {
                 {field.type === 'select' ? (
                   <FormControl fullWidth margin="normal">
                     <InputLabel id={`${field.keyName}Label`}>{field.label}</InputLabel>
-                    <Select {...register(field.keyName)}>
+                    <Select {...register(field.keyName)} defaultValue={profile?.[field.keyName]}>
                       {field.options.map((option) => (
                         <MenuItem key={option} value={option}>{option}</MenuItem>
                       ))}
@@ -151,7 +172,7 @@ const ProfileForm = ({ onSubmitForm }) => {
             </div>
           </Grid>
           <Button type="submit" variant="contained" color="primary" className="mt-4">
-            Save Profile
+            {profile? "Update Profile" : "Save Profile"}
           </Button>
         </form>
       </Paper>

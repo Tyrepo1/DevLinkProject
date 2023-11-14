@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-function DevTable({ displayedDevelopers, filteredDevelopers, handleSort, handlePage, handleRows }) {
+function DevTable({ displayedDevelopers, filteredDevelopers, handleSort, handlePage, handleRows, handleNameClicked }) {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -34,10 +34,6 @@ function DevTable({ displayedDevelopers, filteredDevelopers, handleSort, handleP
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     handleRows(event);
-  };
-
-  const handleNameClicked = (developerID) => {
-    navigate('/find-dev/' + developerID);
   };
 
   return (
@@ -90,7 +86,7 @@ function DevTable({ displayedDevelopers, filteredDevelopers, handleSort, handleP
                   <TableCell>
                     <span
                       className='text-sky-500 cursor-pointer'
-                      onClick={() => handleNameClicked(developer.id)}
+                      onClick={() => handleNameClicked(developer.name)}
                     >
                       {developer.name}
                     </span>

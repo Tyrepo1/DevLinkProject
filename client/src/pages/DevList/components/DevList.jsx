@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DevTable from './DevTable';
 import Filter from './Filter';
 
-function DevList({ developers }) {
+function DevList({ developers, handleNameClicked }) {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -52,6 +52,7 @@ function DevList({ developers }) {
           handleSort={handleRequestSort}
           handlePage={handlePageChange}
           handleRows={handleRowsPerPageChange}
+          handleNameClicked={handleNameClicked}
         />
       </div>
     </div>

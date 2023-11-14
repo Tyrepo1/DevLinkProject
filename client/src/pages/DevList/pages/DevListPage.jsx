@@ -4,7 +4,7 @@ import Footer from '../../../components/Footer'
 import DevList from '../../DevList/components/DevList'
 import { useNavigate } from 'react-router-dom'
 
-function DevListPage() {
+function DevListPage({handleNameClicked}) {
 
   const navigate = useNavigate()
 
@@ -163,10 +163,11 @@ function DevListPage() {
   const handleGetStarted = () => {
     navigate('/login')
   }
+
   return (
 
     <div>
-        <DevList developers={developers} />
+        <DevList developers={developers} handleNameClicked={handleNameClicked} />
     </div>
   )
 }

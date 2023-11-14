@@ -14,13 +14,12 @@ const { collection, getDocs, where, doc, updateDoc, getFirestore, query } = requ
 require('@firebase/firestore');
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC91ei87zfyJ7QtX-n2avx_Jp231NTbTwQ",
-  authDomain: "devlinkproject.firebaseapp.com",
-  projectId: "devlinkproject",
-  storageBucket: "devlinkproject.appspot.com",
-  messagingSenderId: "918607960638",
-  appId: "1:918607960638:web:2d32cfb4bcc41b6f2b8f6f",
-  measurementId: "G-XD1HZL8PLL"
+  apiKey: "AIzaSyASafCzPxYLUgNm_6h9-nhmh55eOTw5b80",
+  authDomain: "personalproject-c291a.firebaseapp.com",
+  projectId: "personalproject-c291a",
+  storageBucket: "personalproject-c291a.appspot.com",
+  messagingSenderId: "24699574002",
+  appId: "1:24699574002:web:515a14f04d480970ba226b"
 };
 
 firebase.initializeApp(firebaseConfig);

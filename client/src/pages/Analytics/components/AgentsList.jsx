@@ -19,7 +19,7 @@ const navigate = useNavigate()
                         <TableRow>
                             <TableCell>Avatar</TableCell>
                             <TableCell>Name</TableCell>
-                            <TableCell>Company</TableCell>
+                            <TableCell>Time</TableCell>
                             <TableCell>Message</TableCell>
                         </TableRow>
                         </TableHead>
@@ -27,11 +27,11 @@ const navigate = useNavigate()
                         {agentData.map((agent, index) => (
                             <TableRow key={index}>
                             <TableCell>
-                                <Avatar alt={agent.name} src={`https://ui-avatars.com/api/?name=${agent.name}`} />
+                                <Avatar alt={agent.from} src={`https://ui-avatars.com/api/?name=${agent.from}`} />
                             </TableCell>
-                            <TableCell onClick={() => handleAgentSelect(agent.name)}><Typography color={"primary"} >{agent.name}</Typography></TableCell>
-                            <TableCell>{agent.company}</TableCell>
-                            <TableCell>{agent.message}</TableCell>
+                            <TableCell onClick={() => handleAgentSelect(agent.from)}><Typography color={"primary"} className=' cursor-pointer'>{agent.from}</Typography></TableCell>
+                            <TableCell>{agent.createdAt}</TableCell>
+                            <TableCell>{agent.text}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
