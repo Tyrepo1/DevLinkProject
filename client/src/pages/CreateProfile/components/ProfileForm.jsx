@@ -1,5 +1,6 @@
 import { DevTool } from '@hookform/devtools';
 import EditIcon from '@mui/icons-material/Edit';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import {
   Avatar,
   Button,
@@ -7,22 +8,22 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
-  IconButton,
   InputLabel,
   MenuItem,
   Paper,
   Select,
   Switch
 } from '@mui/material';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import InputField from '../../../components/InputField';
 import SkillsInput from './SkillsInput';
+import {resizePngImage, uploadPdfToFirestore} from '../../../api/CreateProfile/CreateProfileAPI'
+
 
 const ProfileForm = ({ onSubmitForm, profile }) => {
+  const username = localStorage.getItem("username")
   const {
-    reset,
     register,
     control,
     formState: { errors },
@@ -31,24 +32,24 @@ const ProfileForm = ({ onSubmitForm, profile }) => {
     setValue,
   } = useForm({
     defaultValues: {
-      profilePicture: profile?.profilePicture,
-      bannerPicture: profile?.bannerPicture,
-      resume: null,
-      firstName: profile?.firstName,
-      lastName: profile?.lastName,
-      age: profile?.age,
-      location: profile?.location,
-      experienceLevel: profile?.experienceLevel,
-      educationLevel: profile?.educationLevel,
-      jobType: profile?.jobType,
-      workEnvironment: profile?.workEnvironment,
-      willingnessToRelocate: profile?.willingnessToRelocate,
-      skills: profile?.skills,
-      languages: profile?.languages,
-      isPublic: profile?.isPublic,
-    }
+      firstName: profile?.firstName || '',
+      lastName: profile?.lastName || '',
+      age: profile?.age || '',
+      location: profile?.location || '',
+      experienceLevel: profile?.experienceLevel || '',
+      educationLevel: profile?.educationLevel || '',
+      jobType: profile?.jobType || '',
+      workEnvironment: profile?.workEnvironment || '',
+      willingnessToRelocate: profile?.willingnessToRelocate || '',
+      skills: profile?.skills || '',
+      languages: profile?.languages || '',
+      isPublic: profile?.isPublic || false,
+      resume: profile?.resume || '',
+      profilePicture: profile?.profilePicture || '',
+      bannerPicture: profile?.bannerPicture || 'https://wiki.tripwireinteractive.com/TWIimages/4/47/Placeholder.png',
+    },
   });
-
+  
 
   const skills = useFieldArray({ control, name: 'skills' });
   const languages = useFieldArray({ control, name: 'languages' });
@@ -67,40 +68,58 @@ const ProfileForm = ({ onSubmitForm, profile }) => {
     { keyName: 'willingnessToRelocate', type: 'select', label: 'Willingness to Relocate', options: ['Willing', 'Not Willing'] },
   ];
 
-  const handleUploadFile = (fieldKey, stateKey) => (event) => {
+  const handleUploadFile = (stateKey) => async (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-    reader.onload = () => {
-      const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-
-      const imageBase64Stringsep = base64String;
-      console.log(base64String);
-      setValue(stateKey, imageBase64Stringsep)
-  }
-  reader.readAsDataURL(file);
+  
+    reader.onload = async () => {
+      const base64String = reader.result;
+  
+      if (file.type === 'image/png') {
+        resizePngImage(base64String)
+          .then((resizedBase64String) => {
+            setValue(stateKey, resizedBase64String);
+          })
+          .catch((error) => {
+            console.error('Error resizing PNG image:', error);
+          });
+      } else {
+        setValue(stateKey, base64String);
+      }
+    };
+  
+    reader.readAsDataURL(file);
   };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') event.preventDefault();
   };
 
-  const handleResumeChange = (event) => {
+  const handleUploadPdf = (stateKey) => async (event) => {
     const file = event.target.files[0];
-    setValue('resume', file);
-    setResumePreview(URL.createObjectURL(file));
-  };
+    uploadPdfToFirestore(file).then(
+      (result) => {
+        console.log("Received: " + result)
+        setValue("resume", result)
+      }
+    )
+  }
+  
 
+  register("profilePicture")
+  register("bannerPicture")
+  register("resume")
   const profilePictureValue = watch('profilePicture');
   const bannerPictureValue = watch('bannerPicture');
-  const [resumePreview, setResumePreview] = useState(null);
+  const resumeValue = watch('resume');
 
   return (
     <Container className="mt-8">
       <Paper elevation={3} className="p-6">
         <form onSubmit={handleSubmit(onSubmitForm)} onKeyDown={handleKeyDown}>
-          <input type="file" accept=".png" style={{ display: 'none' }} {...register('bannerPicture')} id="upload-banner-picture" onChange={handleUploadFile('banner-picture', 'bannerPicture')} />
+          <input type="file" accept=".png" style={{ display: 'none' }} id="upload-banner-picture" onChange={handleUploadFile('bannerPicture')} />
           <div className="relative">
-            <img className="w-full h-64" src={`data:image/png;base64,${bannerPictureValue}`} alt="Banner" />
+            <img className="w-full h-64" src={bannerPictureValue} alt="Banner" />
             <EditIcon
               className="cursor-pointer text-white bg-blue-500 rounded-full p-1 absolute top-0 left-[calc(100%-2rem)]"
               onClick={(e) => {
@@ -110,9 +129,9 @@ const ProfileForm = ({ onSubmitForm, profile }) => {
               sx={{ width: '2rem', height: '2rem' }}
             />
           </div>
-          <input type="file" accept=".png" id="upload-profile-picture" {...register('profilePicture')} style={{ display: 'none' }} onChange={handleUploadFile('profile-picture', 'profilePicture')} />
+          <input type="file" accept=".png" id="upload-profile-picture" style={{ display: 'none' }} onChange={handleUploadFile('profilePicture')} />
           <div className="absolute top-[21rem]">
-            <Avatar alt="Profile" src={`data:image/png;base64,${profilePictureValue}`} sx={{ width: '7rem', height: '7rem' }} />
+            <Avatar alt={profilePictureValue} src={profilePictureValue} sx={{ width: '7rem', height: '7rem' }} />
             <EditIcon
               className="cursor-pointer text-white bg-blue-500 rounded-full p-1 absolute top-20 left-20"
               onClick={(e) => {
@@ -153,7 +172,7 @@ const ProfileForm = ({ onSubmitForm, profile }) => {
               </Grid>
             ))}
             <div className="m-6">
-              <input type="file" accept=".pdf" id="upload-resume" {...register('resume')} onChange={handleResumeChange} style={{ display: 'none' }} />
+              <input type="file" accept=".pdf" id="upload-resume" onChange={handleUploadPdf("resume")} style={{ display: 'none' }} />
               <Button
                 variant="contained"
                 endIcon={<FileUploadIcon />}
@@ -164,9 +183,9 @@ const ProfileForm = ({ onSubmitForm, profile }) => {
               >
                 Upload Resume
               </Button>
-              {resumePreview && (
-                <a href={resumePreview} target="_blank" rel="noopener noreferrer" className="ml-5 text-blue-500">
-                  {watch('resume').name}
+              {resumeValue && (
+                <a href={resumeValue} download={"resume.pdf"} target="_blank" rel="noopener noreferrer" className="ml-5 text-blue-500">
+                  Download resume
                 </a>
               )}
             </div>
