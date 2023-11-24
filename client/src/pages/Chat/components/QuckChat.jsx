@@ -1,4 +1,3 @@
-// ChatQuickAccess.js
 import { Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import React from 'react';
 

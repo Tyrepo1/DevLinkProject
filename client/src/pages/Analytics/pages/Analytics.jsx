@@ -6,11 +6,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
+import AgentsList from '../components/AgentsList';
 import Chart from '../components/LineChart';
 import Pie from '../components/PieChart';
 import StatViewer from '../components/StatViewer';
-import AgentsList from '../components/AgentsList';
-import { unansweredConversations } from '../../../api/Chat/ChatAPI';
 
 const statData = [
   { icon: <VisibilityIcon fontSize="large" />, name: "Total Views", unit: "views", value: "10000" },
@@ -224,16 +223,6 @@ function Analytics({handleAgentSelect}) {
       keyName: field
     });
   }, [field])
-
-  useEffect(() => {
-    const unsubscribe = unansweredConversations((users) => {
-      setAgentData(users);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   const handleChange = (event) => {
     setField(event.target.value);

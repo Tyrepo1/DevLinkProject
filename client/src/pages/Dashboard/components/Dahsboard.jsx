@@ -32,6 +32,8 @@ import DevListPage from '../../DevList/pages/DevListPage';
 import { startNewChat } from '../../../api/Chat/ChatAPI';
 import { getProfile } from '../../../api/CreateProfile/CreateProfileAPI';
 import Popup from '../../../components/Popup'
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import Profile from '../../Profile/pages/Profile';
 
 const drawerWidth = 240;
 
@@ -49,11 +51,18 @@ function Dashboard(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const username = localStorage.getItem("username")
 
-  getProfile(username).then(
-    (result) => {
-      setProfile(result)
-    }
-  )
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profile = await getProfile(username);
+        setProfile(profile);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+  
+    fetchData();
+  }, [message])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -90,25 +99,16 @@ function Dashboard(props) {
   }
 
   const handleNameClicked = (dev) =>{
-    startNewChat(dev).then(
-      (result) => {
-        if(result){
-          setToUser(dev)
-          setSelectedItem("chat")
-        }
-        else{
-          alert("Something went wrong")
-        }    
-      }
-    )
-    
+    setProfile(dev)
+    setSelectedItem("profile")
   }
 
   const menuItems = [
-    { key: 'dashboard', icon: <PersonSearchIcon />, text: 'Dashboard', content: <Analytics handleAgentSelect = {handleAgentSelect}/> },
-    { key: 'findDev', icon: <DashboardIcon />, text: 'Find developer', content: <DevListPage handleNameClicked = {handleNameClicked}/> },
-    { key: 'createProfile', icon: <AddIcon />, text: 'Create profile', content: <CreateProfile profile={profile} handleSubmit={handleSubmit}/> },
+    { key: 'dashboard', icon: <DashboardIcon />, text: 'Dashboard', content: <Analytics handleAgentSelect = {handleAgentSelect}/> },
+    { key: 'findDev', icon: <PersonSearchIcon />, text: 'Find developer', content: <DevListPage handleNameClicked = {handleNameClicked}/> },
+    { key: 'createProfile', icon: <AccountBoxIcon />, text: 'My profile', content: <CreateProfile profile={profile} handleSubmit={handleSubmit}/> },
     { key: 'chat', icon: <ChatBubbleIcon />, text: 'Chat', content: <Chat toUser={toUser}/> },
+    { key: 'profile', text: 'Profile', content: <Profile profile={profile} setToUser={setToUser} setSelectedItem={setSelectedItem}/> },
   ];
   
 

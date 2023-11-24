@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import TopNav from '../../../components/TopNav'
-import Footer from '../../../components/Footer'
-import DevList from '../../DevList/components/DevList'
 import { useNavigate } from 'react-router-dom'
+import DevList from '../../DevList/components/DevList'
+import { getProfiles } from '../../../api/Devlist/DevListAPI'
 
 function DevListPage({handleNameClicked}) {
 
   const navigate = useNavigate()
 
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [username, setUsername] = useState("")
+  const [myProfiles, setProfiles] = useState(null)
 
-  useEffect(() => {
-    setLoggedIn(localStorage.getItem("loggedIn"))
-    setUsername(localStorage.getItem("username"))
-
-  });
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const profiles = await getProfiles();
+  //       setProfiles(profiles);
+  //       console.log(JSON.stringify(profiles));
+  //     } catch (error) {
+  //       console.error('Error fetching profiles:', error);
+  //     }
+  //   };
+  
+  //   fetchData();
+  
+  // }, []);
 
   const developers = [
     {

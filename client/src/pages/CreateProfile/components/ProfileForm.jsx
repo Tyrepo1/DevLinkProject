@@ -59,13 +59,15 @@ const ProfileForm = ({ onSubmitForm, profile }) => {
     { keyName: 'lastName', type: 'text', label: 'Last Name', validation: { required: 'This field is required' }, gridSize: 4 },
     { keyName: 'age', type: 'text', label: 'Age', validation: { required: 'This field is required' }, gridSize: 4 },
     { keyName: 'location', type: 'text', label: 'Location', validation: { required: 'This field is required' }, gridSize: 12 },
+    { keyName: 'about', type: 'text', label: 'About', gridSize: 12 },
     { keyName: 'skills', type: 'skills', label: 'Skills', fieldArray: skills, gridSize: 12 },
     { keyName: 'languages', type: 'skills', label: 'Languages', fieldArray: languages, gridSize: 12 },
     { keyName: 'experienceLevel', type: 'select', label: 'Experience Level', options: ['Junior', 'Mid-level', 'Senior'], gridSize: 6 },
     { keyName: 'educationLevel', type: 'select', label: 'Education Level', options: ["Bachelor's Degree", "Master's Degree", "Ph. D."], gridSize: 6 },
     { keyName: 'jobType', type: 'select', label: 'Preferred Job Type', options: ['Full-time', 'Part-time', 'Freelance'], gridSize: 6 },
     { keyName: 'workEnvironment', type: 'select', label: 'Work Environment', options: ['On-Site', 'Remote'], gridSize: 6 },
-    { keyName: 'willingnessToRelocate', type: 'select', label: 'Willingness to Relocate', options: ['Willing', 'Not Willing'] },
+    { keyName: 'willingnessToRelocate', type: 'select', label: 'Willingness to Relocate', options: ['Willing', 'Not Willing'], gridSize: 6 },
+    { keyName: 'availability', type: 'select', label: 'Availability', options: ['Available', 'Not Available'], gridSize: 6 },
   ];
 
   const handleUploadFile = (stateKey) => async (event) => {

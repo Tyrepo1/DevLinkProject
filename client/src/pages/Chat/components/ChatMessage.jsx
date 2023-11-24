@@ -1,17 +1,20 @@
-// ChatMessage.js
 import React from 'react';
 
-const ChatMessage = ({ text, name, sentOrReceived }) => {
-  const isSent = sentOrReceived === 'sent';
+const username = localStorage.getItem("username")
+const ChatMessage = ({ msg }) => {
+  let isSent = false
+  if (msg.from == username) {
+    isSent = true
+  }
   const alignmentClass = isSent ? 'text-right' : 'text-left';
   const colorClass = isSent ? 'bg-blue-500 text-white' : 'bg-gray-300';
 
   return (
     <div className={`mb-2 ${alignmentClass}`}>
       <span className={`inline-block p-2 rounded-lg ${colorClass}`}>
-        {text}
+        {msg.text}
       </span>
-      {name && <div className="text-xs mt-1">{name}</div>}
+      {msg.from && <div className="text-xs mt-1">{msg.from}</div>}
     </div>
   );
 };

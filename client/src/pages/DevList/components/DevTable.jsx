@@ -86,7 +86,7 @@ function DevTable({ displayedDevelopers, filteredDevelopers, handleSort, handleP
                   <TableCell>
                     <span
                       className='text-sky-500 cursor-pointer'
-                      onClick={() => handleNameClicked(developer.name)}
+                      onClick={() => handleNameClicked(developer)}
                     >
                       {developer.name}
                     </span>

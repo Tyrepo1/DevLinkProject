@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Skeleton, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { getConnectedUsers } from '../../../api/Chat/ChatAPI';
 import ChatRoom from '../components/ChatRoom';
-import { connectedUsers, sendMessage, startNewChat } from '../../../api/Chat/ChatAPI';
 import QuickChat from '../components/QuckChat';
-import { Button, Divider, Skeleton, TextField } from '@mui/material';
 
 const Chat = ({ toUser }) => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -10,6 +10,23 @@ const Chat = ({ toUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const username = localStorage.getItem("username")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const connectedUsers = await getConnectedUsers(username)
+        setChatUsers(connectedUsers)
+        setIsLoading(false)
+        alert(JSON.stringify(connectedUsers))
+      } catch (error) {
+        alert('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   const handleUserSelect = (user) => {
     setSelectedUser(user.username);
   };
@@ -18,30 +35,12 @@ const Chat = ({ toUser }) => {
     setSearchTerm(event.target.value);
   };
 
-  useEffect(() => {
-    const unsubscribe = connectedUsers((users) => {
-      setChatUsers(users);
-      setIsLoading(false);
-    });
-    if (toUser && !selectedUser) {
-      const user = chatUsers.find((user) => user.username === toUser);
-      if (user) {
-        setSelectedUser(user.username);
-      }
-    }
-
-    return () => {
-      unsubscribe();
-    };
-  }, [chatUsers]);
-
-
-  // Filter users based on the search term
-  const filteredUsers = chatUsers.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredUsers = chatUsers.filter((user) =>
+  //   user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
+    
     <div className="flex bg-gray-100 h-[86vh]">
       {/* Sidebar */}
       <div className="w-1/4 bg-slate-200 text-black p-4 border-r border-gray-300">
@@ -56,7 +55,6 @@ const Chat = ({ toUser }) => {
         />
         <ul>
           {isLoading ? (
-            // Show Skeleton while loading
             Array.from({ length: 5 }).map((_, index) => (
               <li key={index} className='mb-2 p-2 rounded-lg transition duration-300'>
                 <Skeleton variant="rectangular" width={40} height={40} />
@@ -64,18 +62,17 @@ const Chat = ({ toUser }) => {
               </li>
             ))
           ) : (
-            // Show filtered chat users
-            filteredUsers.map((user, index) => (
+            chatUsers.map((user, index) => (
               <li
                 key={index}
                 onClick={() => handleUserSelect(user)}
                 className='cursor-pointer hover:bg-slate-300 mb-2 p-2 rounded-lg transition duration-300'
               >
                 <QuickChat
-                  username={user.username}
-                  text={user.text}
-                  profilePicture={user.username}
-                  from={user.from}
+                  username={user.otherUser}
+                  text={user.latestText}
+                  profilePicture={user.user}
+                  from={user.latestFrom}
                 />
                 <Divider className="my-2" />
               </li>
@@ -84,9 +81,8 @@ const Chat = ({ toUser }) => {
         </ul>
       </div>
 
-      {/* Main content */}
       <div className="flex-grow p-4">
-        <ChatRoom otherUser={selectedUser || (chatUsers.length > 0 && chatUsers[0].username)} />
+        <ChatRoom otherUser={selectedUser || (chatUsers.length > 0 && chatUsers[0].otherUser)} />
       </div>
     </div>
   );
