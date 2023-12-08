@@ -3,7 +3,7 @@ import React from 'react';
 
 const QuickChat = ({ username, text, profilePicture, from }) => {
   return (
-        <ListItem button>
+        <ListItem>
             <ListItemAvatar>
                 <Avatar alt={username} src={profilePicture} />
             </ListItemAvatar>

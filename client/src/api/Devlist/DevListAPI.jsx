@@ -4,16 +4,12 @@ import { db
 
  export const getProfiles = async () => {
   try {
-    const profilesCollection = collection(db, 'userProfiles');
+    const profileRef = collection(db, 'profiles');
+    const querySnapshot = await getDocs(profileRef);
 
-    const querySnapshot = await getDocs(profilesCollection);
+    const profilesData = querySnapshot.docs.map((doc) => doc.data());
 
-    const profiles = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
-
-    return profiles;
+    return profilesData;
   } catch (error) {
     console.error('Error getting profiles: ', error);
     throw error;

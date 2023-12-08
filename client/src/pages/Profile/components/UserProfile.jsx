@@ -1,14 +1,14 @@
-// src/Profile.js
 import React from 'react';
 import { Typography, Paper, Chip, Avatar, Button } from '@mui/material';
 
 const Profile = ({ profile, handleChat }) => {
   const getAvailabilityChipColor = () => {
-    // Customize this function based on your logic for determining availability color
     return profile.availability === 'Available' ? 'success' : 'error';
   };
+
   return (
     <Paper elevation={3} className="p-6">
+
       <div className="relative mb-20">
         <img
           src="https://wiki.tripwireinteractive.com/TWIimages/4/47/Placeholder.png"
@@ -23,9 +23,13 @@ const Profile = ({ profile, handleChat }) => {
           />
         )}
       </div>
+
+      {/* Avatar Section */}
       <div className="absolute top-[20rem]">
         <Avatar alt={profile?.name} src={profile?.profilePicture} sx={{ width: '7rem', height: '7rem' }} />
       </div>
+
+      {/* Basic Information */}
       <Typography variant="h4" gutterBottom>
         {profile?.name}
       </Typography>
@@ -36,6 +40,8 @@ const Profile = ({ profile, handleChat }) => {
         {profile.age && `Age: ${profile.age} | `}
         {profile.location && `Location: ${profile.location}`}
       </Typography>
+
+      {/* Experience and Availability */}
       <Typography variant="body2" color="textSecondary" paragraph>
         {profile.experienceLevel && `Experience Level: ${profile.experienceLevel} | `}
         {profile.availability && `Availability: `}
@@ -47,31 +53,43 @@ const Profile = ({ profile, handleChat }) => {
           className="mx-1"
         />
       </Typography>
+
+      {/* Education */}
       <Typography variant="body2" color="textSecondary" paragraph>
         {profile.educationLevel && `Education: ${profile.educationLevel}`}
       </Typography>
+
+      {/* Skills */}
       {profile.skills && profile.skills.length > 0 && (
         <Typography variant="body2" color="textSecondary" paragraph>
           Skills:{' '}
-          {profile.skills.map((skill, index) => (
-            <Chip key={index} label={skill} className="mx-1" />
+          {profile.skills.map((skillObj, index) => (
+            <Chip key={index} label={skillObj.skills} className="mx-1" />
           ))}
         </Typography>
       )}
+
+      {/* Languages */}
       {profile.languages && profile.languages.length > 0 && (
         <Typography variant="body2" color="textSecondary" paragraph>
           Languages:{' '}
-          {profile.languages.map((language, index) => (
-            <Chip key={index} label={language} className="mx-1" />
+          {profile.languages.map((skillObj, index) => (
+            <Chip key={index} label={skillObj.languages} className="mx-1" />
           ))}
         </Typography>
       )}
+
+      {/* Resume Section */}
       {profile.resume && (
-        <a href={profile.resume}>
-        <Button variant='contained'>Download CV</Button>
-      </a>
+        <a href={profile.resume} target="_blank" rel="noopener noreferrer">
+          <Button variant="contained">Download CV</Button>
+        </a>
       )}
-      <Button variant='contained' onClick={() => handleChat(profile.name)}>Chat</Button>    
+
+      {/* Chat Button */}
+      <Button variant="contained" onClick={() => handleChat(profile.username)}>
+        Chat with {profile.username}
+      </Button>
     </Paper>
   );
 };

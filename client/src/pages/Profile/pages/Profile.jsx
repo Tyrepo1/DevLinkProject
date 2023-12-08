@@ -1,9 +1,9 @@
 import React from 'react';
 import UserProfile from '../components/UserProfile';
 
-function Profile({ profile, setSelectedItem, setToUser }) {
+function Profile({ profile, handleProfileSelect }) {
   const handleChat = (dev) => {
-    alert(JSON.stringify(dev))
+    handleProfileSelect(dev)
     
   };
 

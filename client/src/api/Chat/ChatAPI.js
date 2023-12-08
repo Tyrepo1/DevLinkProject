@@ -4,7 +4,9 @@ import {
   query,
   where,
   orderBy,
-  limit
+  limit,
+  serverTimestamp,
+  addDoc
 } from 'firebase/firestore';
 import { db } from '../../core/firestore.js';
 
@@ -21,7 +23,6 @@ export const getUser = async (username) => {
 }
 export const getConnectedUsers = async (userId) => {
   try {
-    // Find messages where the specified user is the sender or receiver
     const q = query(
       collection(db, 'messages'),
       where('from', '==', userId),
@@ -31,7 +32,6 @@ export const getConnectedUsers = async (userId) => {
 
     const sentMessages = await getDocs(q);
 
-    // Find messages where the specified user is the receiver
     const qReceived = query(
       collection(db, 'messages'),
       where('to', '==', userId),
@@ -41,14 +41,12 @@ export const getConnectedUsers = async (userId) => {
 
     const receivedMessages = await getDocs(qReceived);
 
-    // Combine and process the messages
     const allMessages = [...sentMessages.docs, ...receivedMessages.docs];
 
     const connectedUsers = allMessages.reduce((uniqueUsers, messageDoc) => {
       const message = messageDoc.data();
       const otherUser = message.from === userId ? message.to : message.from;
 
-      // Check if the otherUser is already in the uniqueUsers array
       const existingUser = uniqueUsers.find((user) => user.otherUser === otherUser);
 
       if (!existingUser) {
@@ -65,6 +63,46 @@ export const getConnectedUsers = async (userId) => {
     return connectedUsers;
   } catch (error) {
     console.error('Error getting connected users: ', error);
-    throw error; // Propagate the error to the caller
+    throw error;
+  }
+};
+
+export const startMessage = async (otherUser) => {
+  const messageRef = collection(db, 'messages')
+  try {
+    const q = query(
+      messageRef,
+      where('from', '==', otherUser),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+
+    const sentMessages = await getDocs(q);
+
+    const qReceived = query(
+      collection(db, 'messages'),
+      where('to', '==', otherUser),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+
+    const receivedMessages = await getDocs(qReceived);
+
+    const allMessages = [...sentMessages.docs, ...receivedMessages.docs];
+
+    if (allMessages.length == 0) {
+      const messageData = {
+        text: "Hello, Let's start chatting!",
+        createdAt: serverTimestamp(),
+        to: otherUser,
+        from: localStorage.getItem("username"),
+      };
+      await addDoc(messageRef, messageData);
+      return true;
+    }
+    return false
+  } catch (error) {
+    console.error('Error getting connected users: ', error);
+    throw false;
   }
 };

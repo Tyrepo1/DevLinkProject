@@ -1,5 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, AppBar, Typography, Avatar } from '@mui/material';
 import {
   addDoc,
   collection,
@@ -11,8 +11,7 @@ import {
 import React, { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { db } from '../../../core/firestore.js';
-import ChatMessage from '../components/ChatMessage'
-import { getUser } from '../../../api/Chat/ChatAPI.js';
+import ChatMessage from '../components/ChatMessage';
 
 function ChatRoom({ otherUser }) {
   const username = localStorage.getItem('username');
@@ -22,11 +21,12 @@ function ChatRoom({ otherUser }) {
   const [data] = useCollectionData(query(
     messagesRef,
     where('to', 'in', [username, otherUser]),
-    where('from', 'in', [username, otherUser])
+    where('from', 'in', [username, otherUser]),
   ));
   const [formValue, setFormValue] = useState('');
 
   const sendMessage = async (e) => {
+    setFormValue('');
     const messageData = {
       text: formValue,
       createdAt: serverTimestamp(),
@@ -34,8 +34,6 @@ function ChatRoom({ otherUser }) {
       from: username,
     };
     await addDoc(messagesRef, messageData);
-
-    setFormValue('');
   }
 
 
@@ -50,8 +48,12 @@ function ChatRoom({ otherUser }) {
 
   return (
     <div className="flex flex-col h-[85vh] overflow-scroll">
+      <div className=' w-full bg-blue-600 p-4 mb-10'>
+        <Typography variant="h6" component="div" color={"white"}>{otherUser}</Typography>
+        </div>
       {data && data.map(msg => <ChatMessage msg={msg} />)}
-      <div className="md:p-4 flex items-en mb-2 bg-white sticky bottom-0">
+      
+      <div className="md:p-4 flex items-en mb-2 bg-white sticky bottom-0 mt-auto">
         <TextField
           label="Type your message"
           variant="outlined"

@@ -1,11 +1,30 @@
-import { saveProfile } from '../../../api/CreateProfile/CreateProfileAPI'
+import { getProfile, saveProfile } from '../../../api/CreateProfile/CreateProfileAPI'
 import ProfileForm from '../components/ProfileForm'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 
-function CreateProfile({profile, handleSubmit}) {
+function CreateProfile({ handleSubmit}) {
+
+  const [profile, setProfile] = useState()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const profile = await getProfile(localStorage.getItem("username"));
+        setIsLoading(false)
+        setProfile(profile);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+  
+    fetchData();
+  
+  }, []);
 
   const handleFormSubmit = (value) => {
     saveProfile(value)
@@ -14,7 +33,7 @@ function CreateProfile({profile, handleSubmit}) {
 
   return (
     <div>
-        <ProfileForm onSubmitForm={handleFormSubmit} profile={profile}/>
+        {!isLoading? (<ProfileForm onSubmitForm={handleFormSubmit} profile={profile}/>) : ("Loading...")}
     </div>
   )
 }
