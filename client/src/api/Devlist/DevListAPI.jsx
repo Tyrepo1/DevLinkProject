@@ -1,6 +1,5 @@
-import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
-import { db
- } from '../../core/firestore';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../core/firestore';
 
  export const getProfiles = async () => {
   try {

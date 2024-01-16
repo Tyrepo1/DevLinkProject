@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Card, CardContent, Typography, useMediaQuery } from '@mui/material';
+import { extractValues } from '../../../api/Analytics/AnalyticsAPI';
 
 export default function Pie({ data, keyName, name }) {
   const [skillCounts, setSkillCounts] = useState([]);
@@ -16,8 +17,8 @@ export default function Pie({ data, keyName, name }) {
         // If it's a string, split it into an array (considering it's a delimited string)
         skills = entry[keyName].split(',').map((skill) => skill.trim());
       } else if (Array.isArray(entry[keyName])) {
-        // If it's an array, use it directly
-        skills = entry[keyName];
+        // If it's an obj array, translate to string array and use it directly
+        skills = extractValues(entry[keyName]);
       }
 
       skills.forEach((skill) => {
