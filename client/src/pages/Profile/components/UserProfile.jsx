@@ -1,9 +1,9 @@
 import React from 'react';
 import { Typography, Paper, Chip, Avatar, Button } from '@mui/material';
 
-const Profile = ({ profile, handleChat }) => {
+const UserProfile = ({ profile, handleChat }) => {
   const getAvailabilityChipColor = () => {
-    return profile.availability === 'Available' ? 'success' : 'error';
+    return profile?.availability === 'Available' ? 'success' : 'error';
   };
 
   return (
@@ -37,16 +37,16 @@ const Profile = ({ profile, handleChat }) => {
         {profile?.about}
       </Typography>
       <Typography variant="body2" color="textSecondary" paragraph>
-        {profile.age && `Age: ${profile.age} | `}
-        {profile.location && `Location: ${profile.location}`}
+        {profile?.age && `Age: ${profile?.age} | `}
+        {profile?.location && `Location: ${profile?.location}`}
       </Typography>
 
       {/* Experience and Availability */}
       <Typography variant="body2" color="textSecondary" paragraph>
-        {profile.experienceLevel && `Experience Level: ${profile.experienceLevel} | `}
-        {profile.availability && `Availability: `}
+        {profile?.experienceLevel && `Experience Level: ${profile?.experienceLevel} | `}
+        {profile?.availability && `Availability: `}
         <Chip
-          label={profile.availability}
+          label={profile?.availability}
           color={getAvailabilityChipColor()}
           variant="outlined"
           size="small"
@@ -56,42 +56,42 @@ const Profile = ({ profile, handleChat }) => {
 
       {/* Education */}
       <Typography variant="body2" color="textSecondary" paragraph>
-        {profile.educationLevel && `Education: ${profile.educationLevel}`}
+        {profile?.educationLevel && `Education: ${profile?.educationLevel}`}
       </Typography>
 
       {/* Skills */}
-      {profile.skills && profile.skills.length > 0 && (
+      {profile?.skills && profile?.skills.length > 0 && (
         <Typography variant="body2" color="textSecondary" paragraph>
           Skills:{' '}
-          {profile.skills.map((skillObj, index) => (
+          {profile?.skills.map((skillObj, index) => (
             <Chip key={index} label={skillObj.skills} className="mx-1" />
           ))}
         </Typography>
       )}
 
       {/* Languages */}
-      {profile.languages && profile.languages.length > 0 && (
+      {profile?.languages && profile?.languages.length > 0 && (
         <Typography variant="body2" color="textSecondary" paragraph>
           Languages:{' '}
-          {profile.languages.map((skillObj, index) => (
+          {profile?.languages.map((skillObj, index) => (
             <Chip key={index} label={skillObj.languages} className="mx-1" />
           ))}
         </Typography>
       )}
 
       {/* Resume Section */}
-      {profile.resume && (
-        <a href={profile.resume} target="_blank" rel="noopener noreferrer">
+      {profile?.resume && (
+        <a href={profile?.resume} target="_blank" rel="noopener noreferrer">
           <Button variant="contained">Download CV</Button>
         </a>
       )}
 
       {/* Chat Button */}
-      <Button variant="contained" onClick={() => handleChat(profile.username)}>
-        Chat with {profile.username}
+      <Button variant="contained" onClick={() => handleChat(profile?.username)}>
+        Chat with {profile?.username}
       </Button>
     </Paper>
   );
 };
 
-export default Profile;
+export default UserProfile;

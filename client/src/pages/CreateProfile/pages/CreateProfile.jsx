@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 
 
 
-function CreateProfile({ handleSubmit}) {
+function CreateProfile() {
 
   const [profile, setProfile] = useState()
   const [isLoading, setIsLoading] = useState(true)
@@ -28,7 +28,6 @@ function CreateProfile({ handleSubmit}) {
 
   const handleFormSubmit = (value) => {
     saveProfile(value)
-    handleSubmit()
   }
 
   return (

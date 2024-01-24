@@ -22,6 +22,7 @@ export const saveProfile = async (profile) => {
     }
   
     try {
+      debugger;
       const existingProfileQuery = query(profilesRef, where('username', '==', username));
       const existingProfiles = await getDocs(existingProfileQuery);
   
@@ -59,8 +60,8 @@ export const resizePngImage = (base64String) => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
   
-        const maxWidth = 800;
-        const maxHeight = 600;
+        const maxWidth = 80;
+        const maxHeight = 60;
   
         const aspectRatio = img.width / img.height;
         let newWidth = maxWidth;

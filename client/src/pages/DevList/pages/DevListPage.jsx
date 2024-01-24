@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import DevList from '../../DevList/components/DevList'
 import { getProfiles } from '../../../api/Devlist/DevListAPI'
+import { useDispatch } from 'react-redux'
+import { changeScreen } from '../../../core/state/screenChanger/screenSlice'
 
-function DevListPage({handleNameClicked}) {
+function DevListPage() {
 
   const [myProfiles, setProfiles] = useState(null)
+  const dispatch = useDispatch();
+
+  const handleNameClicked = (developer) => {
+    dispatch(changeScreen({name: "profile", profile: developer}))
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,32 +22,15 @@ function DevListPage({handleNameClicked}) {
         console.error('Error fetching profiles:', error);
       }
     };
-  
-    fetchData();
-  
-  }, []);
 
-  const developers = [
-    {
-      id: 2,
-      name: "Jane Smith",
-      age: 28,
-      skills: [{skills: "Java"}, {skills: "Python"}],
-      experienceLevel: "Mid-level",
-      availability: 0,
-      location: "New York, USA",
-      educationLevel: "Master's degree",
-      preferredJob: "Freelance",
-      willingnessToRelocate: "Willing",
-      languages: [{languages: "English"}, {languages: "Spanish"}],
-      workEnvironment: "Remote",
-    },
-]
+    fetchData();
+
+  }, []);
 
   return (
 
     <div>
-        {myProfiles && <DevList developers={myProfiles} handleNameClicked={handleNameClicked} />}
+      {myProfiles && <DevList developers={myProfiles} handleNameClicked={handleNameClicked} />}
     </div>
   )
 }
