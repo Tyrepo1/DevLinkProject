@@ -3,6 +3,21 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { Card, CardContent, Typography } from '@mui/material';
 
 export default function LineDataset({ name, data, labels, colors, customization, key, min, max }) {
+  const convertValue = (dayString) => {
+    const currentMonth = new Date().getMonth() + 1
+    const [day, month, year] = dayString.split('-');
+    if(month == currentMonth){
+      return day;
+    }
+    return 0;
+  };
+
+  const convertedData = data.map(item => ({
+    ...item,
+    day: convertValue(item.day)
+  }));
+
+
   return (
     <Card>
       <CardContent>
@@ -25,7 +40,7 @@ export default function LineDataset({ name, data, labels, colors, customization,
             color: colors[key],
             showMark: false,
           }))}
-          dataset={data}
+          dataset={convertedData}
           {...customization}
         />
       </CardContent>

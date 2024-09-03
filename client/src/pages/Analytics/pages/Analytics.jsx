@@ -18,13 +18,14 @@ const statData = [
 ];
 
 const stats = [
-  { day: 1, downloads: 150, views: 1000 },
-  { day: 2, downloads: 200, views: 800 },
-  { day: 3, downloads: 180, views: 1200 },
-  { day: 4, downloads: 250, views: 900 },
-  { day: 5, downloads: 300, views: 1100 },
-  // Add more data points as needed
-];
+  { day: "28-02-2024", downloads: 150, views: 1000 },
+  { day: "01-03-2024", downloads: 150, views: 1000 },
+  { day: "02-03-2024", downloads: 200, views: 800 },
+  { day: "03-03-2024", downloads: 180, views: 1200 },
+  { day: "04-03-2024", downloads: 250, views: 900 },
+  { day: "05-03-2024", downloads: 300, views: 1100 },
+]
+
 const keyToLabel = {
   views: 'Total Views',
   downloads: 'Total Downloads',
@@ -77,7 +78,89 @@ function Analytics({handleAgentSelect}) {
     const fetchData = async () => {
       try {
         const devs = await getProfiles();
-        setDevelopers(devs || []);
+        setDevelopers([
+          {
+            "skills": [{"skills": "Java"}, {"skills": "Python"}],
+            "languages": [{"languages": "English"}, {"languages": "Russian"}],
+            "experienceLevel": "Junior",
+            "educationLevel": "Bachelor's Degree",
+            "jobType": "Full-time",
+            "workEnvironment": "On-Site",
+            "willingnessToRelocate": "Willing"
+          },
+          {
+            "skills": [{"skills": "JavaScript"}, {"skills": "React"}],
+            "languages": [{"languages": "Spanish"}, {"languages": "French"}],
+            "experienceLevel": "Intermediate",
+            "educationLevel": "Master's Degree",
+            "jobType": "Part-time",
+            "workEnvironment": "Remote",
+            "willingnessToRelocate": "Not willing"
+          },
+          {
+            "skills": [{"skills": "C#"}, {"skills": "ASP.NET"}],
+            "languages": [{"languages": "German"}, {"languages": "Chinese"}],
+            "experienceLevel": "Senior",
+            "educationLevel": "Ph.D.",
+            "jobType": "Contract",
+            "workEnvironment": "Hybrid",
+            "willingnessToRelocate": "Depends on the offer"
+          },
+          {
+            "skills": [{"skills": "Java"}, {"skills": "Python"}],
+            "languages": [{"languages": "English"}, {"languages": "Russian"}],
+            "experienceLevel": "Junior",
+            "educationLevel": "Bachelor's Degree",
+            "jobType": "Full-time",
+            "workEnvironment": "On-Site",
+            "willingnessToRelocate": "Willing"
+          },
+          {
+            "skills": [{"skills": "JavaScript"}, {"skills": "React"}],
+            "languages": [{"languages": "Spanish"}, {"languages": "French"}],
+            "experienceLevel": "Intermediate",
+            "educationLevel": "Master's Degree",
+            "jobType": "Part-time",
+            "workEnvironment": "Remote",
+            "willingnessToRelocate": "Not willing"
+          },
+          {
+            "skills": [{"skills": "C#"}, {"skills": "ASP.NET"}],
+            "languages": [{"languages": "German"}, {"languages": "Chinese"}],
+            "experienceLevel": "Senior",
+            "educationLevel": "Ph.D.",
+            "jobType": "Contract",
+            "workEnvironment": "Hybrid",
+            "willingnessToRelocate": "Depends on the offer"
+          },
+          {
+            "skills": [{"skills": "Java"}, {"skills": "Python"}],
+            "languages": [{"languages": "English"}, {"languages": "Russian"}],
+            "experienceLevel": "Junior",
+            "educationLevel": "Bachelor's Degree",
+            "jobType": "Full-time",
+            "workEnvironment": "On-Site",
+            "willingnessToRelocate": "Willing"
+          },
+          {
+            "skills": [{"skills": "JavaScript"}, {"skills": "React"}],
+            "languages": [{"languages": "Spanish"}, {"languages": "French"}],
+            "experienceLevel": "Intermediate",
+            "educationLevel": "Master's Degree",
+            "jobType": "Part-time",
+            "workEnvironment": "Remote",
+            "willingnessToRelocate": "Not willing"
+          },
+          {
+            "skills": [{"skills": "C#"}, {"skills": "ASP.NET"}],
+            "languages": [{"languages": "German"}, {"languages": "Chinese"}],
+            "experienceLevel": "Senior",
+            "educationLevel": "Ph.D.",
+            "jobType": "Contract",
+            "workEnvironment": "Hybrid",
+            "willingnessToRelocate": "Depends on the offer"
+          },
+        ]);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -100,7 +183,6 @@ function Analytics({handleAgentSelect}) {
   
   return (
     <div className=''>
-      {JSON.stringify(developers)}
       <Grid container className='w-screen' spacing={2}>
         {statData.map((stat, index) => (
           <Grid key={index} item xs={12} md={6}>

@@ -11,14 +11,13 @@ export default function Pie({ data, keyName, name }) {
     const counts = {};
 
     data.forEach((entry) => {
+      console.log(data)
       let skills;
 
-      if (typeof entry[keyName] === 'string') {
-        // If it's a string, split it into an array (considering it's a delimited string)
+      if (typeof(entry[keyName]) === 'string') {
         skills = entry[keyName].split(',').map((skill) => skill.trim());
       } else if (Array.isArray(entry[keyName])) {
-        // If it's an obj array, translate to string array and use it directly
-        skills = extractValues(entry[keyName]);
+        skills = entry[keyName].map(skill => skill[keyName])
       }
 
       skills.forEach((skill) => {
